@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>SmartDash</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f8f6f2;
+  --card:#ffffff;
+  --green:#16803c;
+  --green-bg:#f0fdf4;
+  --green-border:#bbf7d0;
+  --orange:#ea580c;
+  --orange-bg:#fff7ed;
+  --orange-border:#fed7aa;
+  --text:#111827;
+  --sub:#6b7280;
+  --border:#e9e4dc;
+  --red:#dc2626;
+  --crypto:#111827;
+  --purple:#7c3aed;
+}
+html,body{height:100%;overflow:hidden;background:#1c1917;}
+body{font-family:'Plus Jakarta Sans',sans-serif;display:flex;justify-content:center;align-items:center;}
+
+.phone{
+width:390px;height:844px;background:var(–bg);
+border-radius:48px;overflow:hidden;position:relative;
+box-shadow:0 0 0 1px #333,0 0 0 10px #111,0 40px 80px rgba(0,0,0,0.6);
+display:flex;flex-direction:column;
+}
+
+/* STATUS */
+.sb{background:var(–bg);padding:14px 26px 2px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px;flex-shrink:0;}
+.sb-r{display:flex;gap:5px;align-items:center;font-size:12px;}
+.batt{background:#111;color:#fff;border-radius:4px;padding:2px 6px;font-size:11px;font-weight:700;}
+
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.screen.active{display:flex;}
+
+/* ── DASHBOARD ── */
+.dash-nav{padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.logo{font-weight:800;font-size:20px;letter-spacing:-0.5px;}
+.logo-slash{color:var(–orange);}
+.logo b{color:var(–orange);}
+.menu-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:4px;}
+.menu-btn span{display:block;width:20px;height:2px;background:var(–text);border-radius:2px;}
+.order-now-btn{background:var(–orange);color:#fff;font-weight:700;font-size:13px;padding:8px 16px;border-radius:10px;border:none;cursor:pointer;}
+
+.dash-body{flex:1;overflow-y:auto;padding:4px 16px 20px;}
+.dash-body::-webkit-scrollbar{display:none;}
+
+/* Hero card */
+.hero-card{background:var(–orange);border-radius:20px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;}
+.hero-card::after{content:’’;position:absolute;right:-20px;top:-20px;width:120px;height:120px;background:rgba(255,255,255,0.08);border-radius:50%;}
+.hero-tag{background:rgba(255,255,255,0.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;display:inline-block;margin-bottom:10px;}
+.hero-title{color:#fff;font-weight:800;font-size:22px;line-height:1.2;margin-bottom:6px;}
+.hero-sub{color:rgba(255,255,255,0.8);font-size:13px;margin-bottom:14px;}
+.hero-input{width:100%;background:#fff;border:none;border-radius:12px;padding:12px 14px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;color:var(–sub);cursor:pointer;outline:none;}
+
+/* Signup nudge */
+.nudge{background:var(–orange-bg);border:1px solid var(–orange-border);border-radius:14px;padding:13px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.nudge-text{font-size:12px;color:#9a3412;line-height:1.45;}
+.nudge-text strong{color:#7c2d12;}
+.nudge-btn{background:var(–orange);color:#fff;border:none;border-radius:9px;padding:8px 13px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;font-family:‘Plus Jakarta Sans’,sans-serif;}
+
+/* How it works */
+.section-label{font-weight:700;font-size:13px;color:var(–sub);text-transform:uppercase;letter-spacing:0.06em;margin:4px 0 10px;}
+.steps-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.step-card{background:var(–card);border-radius:14px;padding:13px;border:1px solid var(–border);}
+.step-num{width:26px;height:26px;border-radius:8px;background:var(–orange-bg);color:var(–orange);font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;}
+.step-title{font-weight:700;font-size:12px;margin-bottom:3px;}
+.step-desc{font-size:11px;color:var(–sub);line-height:1.4;}
+
+/* Savings preview */
+.savings-preview{background:var(–green-bg);border:1px solid var(–green-border);border-radius:16px;padding:16px;margin-bottom:14px;}
+.sp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.sp-title{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;}
+.sp-lock{background:#fff;color:var(–green);font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;border:1px solid var(–green-border);}
+.sp-nums{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;text-align:center;}
+.sp-div{background:var(–green-border);}
+.sp-val{font-weight:800;font-size:20px;color:#aaa;}
+.sp-lbl{font-size:11px;color:var(–sub);margin-top:2px;}
+.sp-cta{margin-top:12px;text-align:center;font-size:12px;color:var(–sub);}
+.sp-cta a{color:var(–orange);font-weight:600;text-decoration:none;}
+
+.bottom-nav{background:#fff;border-top:1px solid var(–border);display:grid;grid-template-columns:repeat(4,1fr);padding:10px 0 26px;flex-shrink:0;}
+.bn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(–sub);cursor:pointer;padding:4px;font-weight:500;}
+.bn.active{color:var(–text);font-weight:700;}
+.bn-ic{font-size:20px;}
+
+/* ── STEP TOP BAR ── */
+.step-bar{background:var(–bg);padding:14px 20px 10px;display:flex;align-items:center;gap:12px;flex-shrink:0;border-bottom:1px solid var(–border);}
+.back{background:none;border:none;font-size:22px;cursor:pointer;color:var(–text);line-height:1;width:32px;}
+.step-info{flex:1;}
+.step-name{font-weight:800;font-size:15px;}
+.step-prog{display:flex;align-items:center;gap:5px;margin-top:3px;}
+.step-prog span{font-size:11px;color:var(–sub);}
+.pip{height:4px;border-radius:2px;background:var(–border);}
+.pip.p1{width:26px;}.pip.p2{width:16px;}.pip.p3{width:16px;}
+.pip.lit{background:var(–orange);}
+
+/* ── STEP 1 ── */
+#s1 .body{flex:1;overflow-y:auto;padding:18px 16px;}
+#s1 .body::-webkit-scrollbar{display:none;}
+
+.page-title{font-weight:800;font-size:26px;line-height:1.15;text-align:center;margin-bottom:8px;}
+.page-sub{font-size:13px;color:var(–sub);text-align:center;line-height:1.55;margin-bottom:22px;}
+
+.input-card{background:var(–card);border-radius:18px;padding:16px;margin-bottom:14px;border:1px solid var(–border);}
+.ic-label{font-weight:700;font-size:13px;margin-bottom:10px;color:var(–text);}
+
+.link-field{display:flex;align-items:center;gap:8px;background:var(–bg);border:1.5px solid var(–border);border-radius:12px;padding:11px 12px;transition:border-color 0.2s;}
+.link-field:focus-within{border-color:var(–orange);}
+.link-field input{flex:1;background:none;border:none;outline:none;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;color:var(–text);}
+.link-field input::placeholder{color:#aaa;}
+.clr-btn{background:none;border:none;cursor:pointer;color:#aaa;font-size:17px;line-height:1;}
+
+.field-hint{font-size:11px;color:var(–sub);margin-top:7px;line-height:1.5;}
+.field-error{font-size:12px;color:var(–red);margin-top:6px;display:none;align-items:center;gap:5px;}
+
+/* Validating */
+.val-field{display:none;align-items:center;gap:8px;background:var(–bg);border:1.5px solid var(–border);border-radius:12px;padding:11px 12px;margin-bottom:0;}
+.spin{width:16px;height:16px;border:2px solid var(–border);border-top-color:var(–orange);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.val-url{flex:1;font-size:12px;color:var(–sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Validated */
+.validated{background:var(–green-bg);border-radius:12px;padding:13px;margin-top:10px;border:1px solid var(–green-border);display:none;}
+.val-ok{display:flex;align-items:center;gap:7px;font-weight:700;font-size:13px;color:var(–green);margin-bottom:11px;}
+.val-detail-box{background:#fff;border-radius:10px;padding:12px;margin-bottom:10px;}
+.vdr{display:flex;align-items:center;gap:8px;font-size:13px;padding:3px 0;}
+.vdr-ic{color:var(–sub);font-size:14px;width:18px;text-align:center;}
+.view-order-btn{width:100%;background:none;border:1.5px solid var(–border);border-radius:10px;padding:11px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;color:var(–text);}
+
+.country-pill{display:flex;align-items:center;justify-content:space-between;background:var(–bg);border-radius:12px;padding:12px;margin-top:10px;}
+.cp-left .cp-name{font-weight:700;font-size:14px;}
+.cp-left .cp-platform{font-size:12px;color:var(–sub);margin-top:2px;display:flex;align-items:center;gap:6px;}
+.off-tag{background:#dcfce7;color:#166534;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;}
+.cp-right{font-size:13px;color:var(–sub);}
+
+.cta-btn{width:100%;border:none;border-radius:14px;padding:16px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:800;font-size:15px;cursor:pointer;margin-bottom:16px;background:var(–orange);color:#fff;opacity:0.45;transition:opacity .2s;}
+.cta-btn.on{opacity:1;}
+
+.how-box{background:var(–card);border-radius:16px;padding:16px;border:1px solid var(–border);}
+.how-box-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:12px;}
+.how-box-ic{background:#fef9c3;color:#b45309;width:24px;height:24px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.how-step{display:flex;gap:10px;margin-bottom:10px;}
+.how-step:last-child{margin-bottom:0;}
+.hn{width:22px;height:22px;border-radius:50%;background:var(–bg);border:1px solid var(–border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.ht{font-size:12px;color:var(–sub);line-height:1.5;}
+
+/* ── STEP 1b: ADD ITEMS ── */
+#s1b .body{flex:1;overflow-y:auto;padding:18px 16px;}
+#s1b .body::-webkit-scrollbar{display:none;}
+
+.add-items-header{background:var(–card);border-radius:16px;padding:14px;margin-bottom:14px;border:1px solid var(–border);}
+.aih-top{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.aih-ic{font-size:20px;}
+.aih-name{font-weight:700;font-size:15px;}
+.aih-sub{font-size:12px;color:var(–sub);}
+.aih-link{font-size:11px;color:var(–sub);word-break:break-all;margin-top:8px;padding-top:8px;border-top:1px solid var(–border);}
+
+.items-list{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.item-row{background:var(–card);border-radius:14px;padding:13px;border:1px solid var(–border);display:flex;gap:10px;align-items:flex-start;}
+.item-qty-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.qty-btn{background:var(–bg);border:1px solid var(–border);width:26px;height:26px;border-radius:7px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(–text);}
+.qty-num{font-weight:700;font-size:14px;}
+.item-fields{flex:1;display:flex;flex-direction:column;gap:6px;}
+.item-name-input{width:100%;border:1.5px solid var(–border);border-radius:9px;padding:8px 10px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;color:var(–text);outline:none;background:#fafafa;}
+.item-name-input:focus{border-color:var(–orange);}
+.item-name-input::placeholder{color:#bbb;}
+.item-mod-input{width:100%;border:1.5px solid var(–border);border-radius:9px;padding:7px 10px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:12px;color:var(–sub);outline:none;background:#fafafa;}
+.item-mod-input:focus{border-color:var(–orange);}
+.item-mod-input::placeholder{color:#ccc;}
+.item-price-input{width:80px;border:1.5px solid var(–border);border-radius:9px;padding:7px 10px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:600;color:var(–text);outline:none;background:#fafafa;}
+.item-price-input:focus{border-color:var(–orange);}
+.item-price-row{display:flex;align-items:center;gap:6px;}
+.price-prefix{font-size:13px;font-weight:600;color:var(–sub);}
+.del-item{background:none;border:none;cursor:pointer;color:#ccc;font-size:18px;margin-top:2px;}
+.del-item:hover{color:var(–red);}
+
+.add-item-btn{width:100%;background:var(–bg);border:1.5px dashed var(–border);border-radius:14px;padding:13px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:600;color:var(–sub);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;}
+.add-item-btn:hover{border-color:var(–orange);color:var(–orange);}
+
+.order-total-bar{background:var(–green-bg);border:1px solid var(–green-border);border-radius:14px;padding:13px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;}
+.otb-label{font-size:13px;color:var(–sub);}
+.otb-total{font-weight:800;font-size:18px;color:var(–green);}
+
+/* ── STEP 2 ── */
+#s2 .body{flex:1;overflow-y:auto;padding:0 16px 20px;}
+#s2 .body::-webkit-scrollbar{display:none;}
+
+.price-block{padding:14px 0 12px;border-bottom:1px solid var(–border);margin-bottom:16px;}
+.pb-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px;}
+.pb-muted{color:var(–sub);}
+.pb-green{color:var(–green);font-weight:700;}
+.pb-sep{height:1px;background:var(–border);margin:10px 0;}
+.pb-total{font-weight:800;font-size:16px;}
+
+.field-group{margin-bottom:15px;}
+.field-lbl{font-weight:700;font-size:13px;margin-bottom:7px;display:flex;align-items:center;gap:4px;}
+.req{color:var(–red);font-size:12px;}
+.f-wrap{position:relative;}
+.f-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;color:#bbb;pointer-events:none;}
+.f-input{width:100%;border:1.5px solid var(–border);border-radius:12px;padding:13px 13px 13px 42px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:14px;color:var(–text);background:#fff;outline:none;transition:border-color .2s;}
+.f-input:focus{border-color:var(–orange);}
+.f-input::placeholder{color:#bbb;}
+.f-note{font-size:11px;color:var(–sub);margin-top:5px;}
+.f-warn{font-size:12px;color:#d97706;margin-top:5px;display:none;}
+.plain-f{width:100%;border:1.5px solid var(–border);border-radius:12px;padding:13px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:14px;color:var(–text);background:#fff;outline:none;transition:border-color .2s;}
+.plain-f:focus{border-color:var(–orange);}
+.plain-f::placeholder{color:#bbb;}
+.textarea-f{width:100%;border:1.5px solid var(–border);border-radius:12px;padding:12px 13px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:14px;color:var(–text);background:#fff;outline:none;resize:none;min-height:76px;transition:border-color .2s;}
+.textarea-f:focus{border-color:var(–orange);}
+.textarea-f::placeholder{color:#bbb;}
+
+.sms-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;}
+.sms-cb{width:18px;height:18px;accent-color:var(–orange);flex-shrink:0;margin-top:2px;cursor:pointer;}
+.sms-txt{font-size:12px;color:var(–sub);line-height:1.55;}
+
+.btn-row{display:flex;gap:10px;}
+.btn-back{flex:1;background:#fff;border:1.5px solid var(–border);border-radius:13px;padding:14px;font-weight:700;font-size:14px;cursor:pointer;color:var(–text);font-family:‘Plus Jakarta Sans’,sans-serif;}
+.btn-cont{flex:2;background:var(–orange);color:#fff;border:none;border-radius:13px;padding:14px;font-weight:800;font-size:14px;cursor:pointer;opacity:.45;transition:opacity .2s;font-family:‘Plus Jakarta Sans’,sans-serif;}
+.btn-cont.on{opacity:1;}
+
+/* ── STEP 3 ── */
+#s3 .body{flex:1;overflow-y:auto;padding:0 16px 24px;}
+#s3 .body::-webkit-scrollbar{display:none;}
+
+.summary-card{background:#fff;border-radius:16px;padding:14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(–border);}
+.sc-left{display:flex;align-items:center;gap:10px;}
+.sc-ic{font-size:20px;}
+.sc-name{font-weight:700;font-size:14px;}
+.sc-sub{font-size:12px;color:var(–sub);margin-top:1px;}
+.sc-view{background:none;border:1.5px solid var(–border);border-radius:9px;padding:6px 12px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(–text);}
+
+.info-card{background:#fff;border-radius:14px;padding:13px;margin-bottom:10px;border:1px solid var(–border);display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5;}
+.info-ic{font-size:17px;color:var(–sub);flex-shrink:0;margin-top:1px;}
+
+.link-card-p3{background:#fff;border-radius:14px;padding:13px;margin-bottom:10px;border:1px solid var(–border);}
+.lcp-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(–sub);margin-bottom:5px;}
+.lcp-url{font-size:12px;color:var(–text);word-break:break-all;line-height:1.5;}
+
+.name-card{background:#fff;border-radius:14px;padding:13px;margin-bottom:10px;border:1px solid var(–border);}
+.nc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.nc-avatar{width:36px;height:36px;border-radius:50%;background:#e0f2fe;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.nc-title{font-weight:700;font-size:14px;}
+.nc-sub{font-size:12px;color:var(–sub);}
+.nc-bottom{display:flex;align-items:center;justify-content:space-between;}
+.nc-name{font-size:14px;font-weight:600;}
+.nc-edit{background:none;border:1.5px solid var(–green-border);color:var(–green);border-radius:8px;padding:5px 12px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:12px;font-weight:700;cursor:pointer;}
+
+.tip-card{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid var(–border);}
+.tip-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.tip-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;}
+.tip-ball{background:#f3f0ff;color:var(–purple);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.tip-val{font-weight:700;font-size:14px;}
+.tip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+.tip-opt{background:var(–bg);border:1.5px solid var(–border);border-radius:10px;padding:10px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;color:#3b82f6;transition:all .15s;}
+.tip-opt.sel{background:var(–purple);color:#fff;border-color:var(–purple);}
+.tip-other{display:flex;align-items:center;gap:6px;}
+.tip-other span{font-size:13px;color:var(–sub);}
+.tip-other-in{border:1.5px solid var(–border);border-radius:9px;padding:8px 11px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;width:80px;outline:none;}
+.tip-other-in:focus{border-color:var(–purple);}
+
+.totals{padding:4px 0 14px;}
+.tot-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:5px;}
+.tot-sub{color:var(–sub);}
+.tot-green{color:var(–green);font-weight:700;}
+.tot-sep{height:1px;background:var(–border);margin:8px 0 10px;}
+.tot-final{font-weight:800;font-size:16px;}
+
+.pay-btn{width:100%;background:var(–crypto);color:#fff;border:none;border-radius:14px;padding:17px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:800;font-size:15px;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.pay-badge{background:#22c55e;color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;}
+.pay-note{font-size:12px;color:var(–sub);text-align:center;line-height:1.55;margin-bottom:4px;}
+
+/* ── ITEMS MODAL ── */
+.modal-wrap{position:absolute;inset:0;z-index:80;background:rgba(0,0,0,0.55);display:none;align-items:flex-end;}
+.modal-wrap.open{display:flex;}
+.modal{background:#fff;border-radius:24px 24px 0 0;width:100%;padding:18px 18px 36px;max-height:72%;overflow-y:auto;}
+.modal::-webkit-scrollbar{display:none;}
+.m-handle{width:36px;height:4px;background:var(–border);border-radius:2px;margin:0 auto 14px;}
+.m-title{font-weight:800;font-size:16px;margin-bottom:2px;}
+.m-sub{font-size:12px;color:var(–sub);margin-bottom:14px;}
+.m-item{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(–border);}
+.m-item:last-child{border-bottom:none;}
+.m-item-l{display:flex;align-items:center;gap:10px;}
+.m-qty{background:var(–bg);border-radius:7px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;}
+.m-name{font-size:13px;font-weight:600;}
+.m-mod{font-size:11px;color:var(–sub);margin-top:1px;}
+.m-price{font-weight:700;font-size:13px;}
+.m-total{display:flex;justify-content:space-between;font-weight:800;font-size:15px;padding-top:12px;margin-top:4px;border-top:2px solid var(–text);}
+.m-close{width:100%;background:var(–text);color:#fff;border:none;border-radius:13px;padding:13px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:14px;}
+
+/* ── SIDEBAR ── */
+.ov{position:absolute;inset:0;z-index:50;background:rgba(0,0,0,0.4);display:none;}
+.ov.open{display:block;}
+.sidebar{position:absolute;top:0;left:0;bottom:0;width:78%;background:#fff;z-index:51;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .28s ease;}
+.sidebar.open{transform:translateX(0);}
+.sb-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(–border);}
+.sb-logo{font-weight:800;font-size:16px;letter-spacing:-0.3px;}
+.sb-logo .s{color:var(–orange);}
+.sb-x{background:none;border:none;font-size:20px;cursor:pointer;color:var(–sub);}
+.sb-user{background:var(–orange);padding:16px 18px;}
+.sb-u-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.sb-u-av{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.sb-u-name{font-weight:700;font-size:15px;color:#fff;}
+.sb-u-role{font-size:12px;color:rgba(255,255,255,.75);}
+.sb-u-btns{display:flex;gap:8px;}
+.sb-u-btn{flex:1;background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:8px;padding:8px;font-weight:600;font-size:12px;cursor:pointer;font-family:‘Plus Jakarta Sans’,sans-serif;}
+.sb-place{display:flex;align-items:center;gap:10px;margin:12px 14px 4px;background:var(–orange);color:#fff;border:none;border-radius:12px;padding:13px 15px;font-weight:700;font-size:14px;cursor:pointer;width:calc(100% - 28px);font-family:‘Plus Jakarta Sans’,sans-serif;}
+.sb-help{display:flex;align-items:center;gap:10px;margin:0 14px;background:var(–bg);color:var(–text);border:none;border-radius:12px;padding:12px 15px;font-weight:600;font-size:13px;cursor:pointer;width:calc(100% - 28px);font-family:‘Plus Jakarta Sans’,sans-serif;}
+.sb-sec{padding:12px 18px 5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(–sub);}
+.sb-lnk{display:flex;align-items:center;gap:10px;padding:12px 18px;font-size:13px;color:var(–text);border:none;background:none;width:100%;font-family:‘Plus Jakarta Sans’,sans-serif;cursor:pointer;font-weight:500;}
+.sb-lnk:hover{background:var(–bg);}
+.sb-lnk .i{font-size:17px;color:var(–sub);}
+
+.bubble{position:absolute;bottom:88px;left:14px;z-index:40;width:48px;height:48px;background:var(–orange);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;box-shadow:0 4px 14px rgba(234,88,12,.45);}
+.bubble::after{content:’’;position:absolute;top:1px;right:1px;width:13px;height:13px;background:#ef4444;border-radius:50%;border:2px solid #fff;}
+
+.toast{position:absolute;bottom:106px;left:50%;transform:translateX(-50%);background:#111;color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:100px;white-space:nowrap;z-index:90;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+
+/* ── TUTORIAL ── */
+.tut-overlay{position:absolute;inset:0;z-index:100;background:rgba(0,0,0,0.5);display:none;align-items:flex-end;}
+.tut-overlay.open{display:flex;}
+.tut-sheet{background:#fff;border-radius:24px 24px 0 0;width:100%;max-height:92%;display:flex;flex-direction:column;}
+.tut-header{padding:20px 18px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-shrink:0;}
+.tut-step-label{font-size:11px;font-weight:800;color:var(–orange);letter-spacing:0.08em;margin-bottom:4px;}
+.tut-title{font-weight:800;font-size:17px;margin-bottom:3px;}
+.tut-sub{font-size:13px;color:var(–sub);}
+.tut-close{background:none;border:1.5px solid var(–border);border-radius:50%;width:32px;height:32px;font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(–sub);}
+.tut-prog-bar{height:4px;background:#f0ede8;flex-shrink:0;}
+.tut-prog-fill{height:100%;background:var(–orange);border-radius:0 2px 2px 0;transition:width .3s ease;}
+.tut-body{flex:1;overflow-y:auto;padding:20px 18px;}
+.tut-body::-webkit-scrollbar{display:none;}
+
+/* Step number badge */
+.tut-step-num{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.tut-num-badge{width:34px;height:34px;border-radius:50%;background:#fee2e2;color:var(–orange);font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tut-step-action{font-weight:700;font-size:15px;color:var(–orange);}
+
+/* Screenshot card */
+.tut-img-card{background:#f8f8f8;border-radius:16px;padding:16px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;min-height:180px;border:1px solid var(–border);}
+.tut-screenshot{width:100%;max-width:260px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.12);}
+
+/* Step description */
+.tut-desc-title{font-weight:800;font-size:18px;margin-bottom:8px;}
+.tut-desc-text{font-size:14px;color:var(–sub);line-height:1.6;}
+
+/* Paste CTA on step 4 */
+.tut-paste-cta{background:var(–green-bg);border:1px solid var(–green-border);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:14px;color:var(–green);font-weight:600;display:flex;align-items:center;gap:8px;}
+
+/* Footer */
+.tut-footer{border-top:1px solid var(–border);padding:12px 18px 28px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.tut-skip{background:none;border:none;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;color:var(–sub);cursor:pointer;}
+.tut-footer-right{display:flex;align-items:center;gap:12px;}
+.tut-count{font-size:13px;color:var(–sub);}
+.tut-btns{display:flex;gap:8px;}
+.tut-back-btn{background:#fff;border:1.5px solid var(–border);border-radius:12px;padding:11px 18px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:700;font-size:14px;cursor:pointer;color:var(–text);}
+.tut-next-btn{background:var(–orange);color:#fff;border:none;border-radius:12px;padding:11px 22px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+
+.crypto-box{background:#111;border-radius:18px;padding:18px;margin-bottom:8px;}
+.cb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.cb-title{color:#fff;font-weight:800;font-size:16px;}
+.cb-badge{background:#22c55e;color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;}
+.cb-desc{color:#9ca3af;font-size:12px;line-height:1.55;margin-bottom:14px;}
+.cb-amount-row{background:#1f2937;border-radius:12px;padding:13px 14px;margin-bottom:12px;}
+.cb-amount-label{font-size:11px;color:#6b7280;margin-bottom:4px;}
+.cb-amount-value{color:#fff;font-weight:800;font-size:24px;}
+.cb-coins{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.coin-btn{background:#1f2937;border:1.5px solid #374151;color:#9ca3af;border-radius:10px;padding:8px 14px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;}
+.coin-btn.active{background:#f97316;border-color:#f97316;color:#fff;}
+.cb-address-label{font-size:11px;color:#6b7280;margin-bottom:6px;}
+.cb-address-wrap{background:#1f2937;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cb-address{flex:1;color:#e5e7eb;font-size:12px;word-break:break-all;line-height:1.4;font-family:monospace;}
+.cb-copy{background:#374151;color:#fff;border:none;border-radius:8px;padding:7px 13px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s;}
+.cb-copy:hover{background:#4b5563;}
+.cb-warn{font-size:11px;color:#f59e0b;margin-bottom:14px;line-height:1.5;}
+.cb-sent-btn{width:100%;background:var(–orange);color:#fff;border:none;border-radius:13px;padding:15px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:800;font-size:15px;cursor:pointer;}
+
+/* ── CHAT SCREEN ── */
+#chat{background:#f3f4f6;}
+.chat-body{flex:1;overflow-y:auto;padding:14px 14px 10px;display:flex;flex-direction:column;gap:10px;}
+.chat-body::-webkit-scrollbar{display:none;}
+.chat-bubble.sys{background:#fff;border-radius:14px;padding:13px;border:1px solid var(–border);display:flex;align-items:flex-start;gap:10px;}
+.sys-icon{font-size:18px;flex-shrink:0;}
+.sys-text{font-size:13px;color:var(–text);line-height:1.5;}
+.chat-bubble.agent{display:flex;align-items:flex-start;gap:10px;}
+.agent-avatar{width:34px;height:34px;border-radius:50%;background:var(–orange);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.agent-msg{background:#fff;border-radius:0 14px 14px 14px;padding:12px 13px;font-size:13px;line-height:1.55;border:1px solid var(–border);max-width:80%;}
+.chat-bubble.user-msg{display:flex;justify-content:flex-end;}
+.user-bubble{background:var(–orange);color:#fff;border-radius:14px 14px 0 14px;padding:11px 13px;font-size:13px;line-height:1.5;max-width:80%;}
+.chat-bubble.agent-reply{display:flex;align-items:flex-start;gap:10px;}
+.agent-reply-msg{background:#fff;border-radius:0 14px 14px 14px;padding:12px 13px;font-size:13px;line-height:1.55;border:1px solid var(–border);max-width:80%;}
+.chat-input-bar{background:#fff;border-top:1px solid var(–border);padding:10px 12px 28px;display:flex;gap:8px;flex-shrink:0;}
+.chat-input{flex:1;background:#f3f4f6;border:1.5px solid var(–border);border-radius:12px;padding:11px 13px;font-family:‘Plus Jakarta Sans’,sans-serif;font-size:14px;color:var(–text);outline:none;}
+.chat-input:focus{border-color:var(–orange);}
+.chat-input::placeholder{color:#bbb;}
+.chat-send{background:var(–orange);color:#fff;border:none;border-radius:12px;padding:11px 18px;font-family:‘Plus Jakarta Sans’,sans-serif;font-weight:700;font-size:14px;cursor:pointer;}
+</style>
+
+</head>
+<body>
+<div class="phone">
+  <div class="sb"><span>7:25</span><div class="sb-r"><span>📶</span><span>🛜</span><span class="batt">94</span></div></div>
+
+  <!-- ══ DASHBOARD ══ -->
+
+  <div class="screen active" id="dash">
+    <div class="dash-nav">
+      <button class="menu-btn" onclick="openSB()"><span></span><span></span><span></span></button>
+      <div class="logo">Smart<b>Dash</b></div>
+      <button class="order-now-btn" onclick="go('s1')">Order Now</button>
+    </div>
+    <div class="dash-body">
+      <div class="hero-card">
+        <div class="hero-tag">✦ Up to 50% off delivery</div>
+        <div class="hero-title">Your favorite food,<br>half the price.</div>
+        <div class="hero-sub">Paste your group order link and we handle the rest.</div>
+        <input class="hero-input" placeholder="Paste your DoorDash or UberEats group link..." readonly onclick="go('s1')"/>
+      </div>
+
+```
+  <div class="nudge">
+    <div class="nudge-text"><strong>Create an account</strong> to unlock order history, quick reorder &amp; savings tracking</div>
+    <button class="nudge-btn" onclick="toast('Sign up coming soon!')">Sign Up</button>
+  </div>
+
+  <div class="section-label">How it works</div>
+  <div class="steps-row">
+    <div class="step-card"><div class="step-num">1</div><div class="step-title">Paste Link</div><div class="step-desc">Share your group order link from DoorDash or UberEats</div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-title">Add Items</div><div class="step-desc">Enter what's in your cart so we know exactly what to place</div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-title">Pay &amp; Save</div><div class="step-desc">Pay via crypto and get 40–50% off your order total</div></div>
+  </div>
+
+  <div class="section-label">Your Savings</div>
+  <div class="savings-preview">
+    <div class="sp-top"><div class="sp-title">📈 Savings Dashboard</div><div class="sp-lock">🔒 Sign in to view</div></div>
+    <div class="sp-nums">
+      <div><div class="sp-val">—</div><div class="sp-lbl">This Month</div></div>
+      <div class="sp-div"></div>
+      <div><div class="sp-val">—</div><div class="sp-lbl">Orders</div></div>
+      <div class="sp-div"></div>
+      <div><div class="sp-val">—</div><div class="sp-lbl">Lifetime</div></div>
+    </div>
+    <div class="sp-cta">Track your savings — <a href="#" onclick="toast('Sign up coming soon!')">create a free account →</a></div>
+  </div>
+</div>
+<div class="bottom-nav">
+  <div class="bn active"><div class="bn-ic">🛍️</div><span>Order</span></div>
+  <div class="bn" onclick="toast('Sign in to view profile')"><div class="bn-ic">👤</div><span>Profile</span></div>
+  <div class="bn" onclick="toast('Sign in to refer friends')"><div class="bn-ic">👥</div><span>Refer</span></div>
+  <div class="bn" onclick="toast('Help & Support')"><div class="bn-ic">❓</div><span>Help</span></div>
+</div>
+```
+
+  </div>
+
+  <!-- ══ STEP 1: ENTER LINK ══ -->
+
+  <div class="screen" id="s1">
+    <div class="step-bar">
+      <button class="back" onclick="go('dash')">☰</button>
+      <div class="step-info">
+        <div class="step-name">Enter Link</div>
+        <div class="step-prog"><span>Step 1 of 3</span><div class="pip p1 lit"></div><div class="pip p2"></div><div class="pip p3"></div></div>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+    <div class="body">
+      <div class="page-title">Slash Your Food Bills</div>
+      <div class="page-sub">We find and apply discounts you didn't know you had — automatically.</div>
+
+```
+  <div class="input-card">
+    <div class="ic-label">DoorDash / UberEats Group Link</div>
+
+    <div id="lf" class="link-field">
+      <span style="font-size:16px;color:#bbb">🔗</span>
+      <input type="text" id="cartLink" placeholder="Paste your group order link here..." oninput="onLink()" onpaste="setTimeout(onLink,10)"/>
+      <button class="clr-btn" onclick="clearLink()">↺</button>
+    </div>
+
+    <div id="vf" class="val-field">
+      <div class="spin"></div>
+      <div class="val-url" id="vUrl"></div>
+      <button class="clr-btn" onclick="clearLink()">↺</button>
+    </div>
+
+    <div id="ferr" class="field-error">⚠ Please paste a DoorDash or UberEats <strong>group order</strong> link</div>
+    <div id="fhint" class="field-hint">Use "Start Group Order" in DoorDash or UberEats, then copy & paste the link here</div>
+
+    <div id="vbox" class="validated">
+      <div class="val-ok">✅ Cart Read Successfully!</div>
+      <div class="val-detail-box">
+        <div class="vdr"><span class="vdr-ic">🍽</span><span id="vRestaurant" style="font-weight:600;"></span></div>
+        <div class="vdr"><span class="vdr-ic">✓</span><span id="vItemCount"></span></div>
+        <div class="vdr"><span class="vdr-ic">💳</span><span id="vSubtotal"></span></div>
+        <div class="vdr"><span class="vdr-ic">🔗</span><span id="vLinkShort" style="font-size:11px;color:var(--sub);word-break:break-all;"></span></div>
+      </div>
+      <button class="view-order-btn" onclick="openModal()">View Order Items ⌄</button>
+    </div>
+
+    <div id="cpill" class="country-pill">
+      <div class="cp-left"><div class="cp-name">USA</div><div class="cp-platform">DoorDash / UberEats <span class="off-tag">50% off</span></div></div>
+      <div class="cp-right">$25–$30</div>
+    </div>
+  </div>
+
+  <button class="cta-btn" id="s1btn" onclick="goAddItems()">Enter a valid group order link to continue</button>
+
+  <div class="how-box">
+    <div class="how-box-title"><div class="how-box-ic">💡</div> How to get your group link</div>
+    <div class="how-step"><div class="hn">1</div><div class="ht">Open DoorDash or UberEats and build your cart</div></div>
+    <div class="how-step"><div class="hn">2</div><div class="ht">Tap <strong>"Start Group Order"</strong> — this creates a shareable link</div></div>
+    <div class="how-step"><div class="hn">3</div><div class="ht">Copy that link and paste it above</div></div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ══ STEP 1b: ADD ITEMS ══ -->
+
+  <div class="screen" id="s1b">
+    <div class="step-bar">
+      <button class="back" onclick="go('s1')">←</button>
+      <div class="step-info">
+        <div class="step-name">Add Your Items</div>
+        <div class="step-prog"><span>Step 1 of 3</span><div class="pip p1 lit"></div><div class="pip p2"></div><div class="pip p3"></div></div>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+    <div class="body">
+      <div class="add-items-header">
+        <div class="aih-top"><div class="aih-ic">🛒</div><div><div class="aih-name">Your Order</div><div class="aih-sub">Enter each item from your cart</div></div></div>
+        <div class="aih-link" id="aihLink"></div>
+      </div>
+
+```
+  <div class="items-list" id="itemsList"></div>
+
+  <button class="add-item-btn" onclick="addItem()">＋ Add another item</button>
+
+  <div class="order-total-bar">
+    <div class="otb-label">Order Total</div>
+    <div class="otb-total" id="orderTotalDisplay">$0.00</div>
+  </div>
+
+  <button class="cta-btn on" onclick="goStep2()">Continue to Delivery →</button>
+</div>
+```
+
+  </div>
+
+  <!-- ══ STEP 2: DELIVERY ══ -->
+
+  <div class="screen" id="s2">
+    <div class="step-bar">
+      <button class="back" onclick="go('s1b')">←</button>
+      <div class="step-info">
+        <div class="step-name">Delivery Details</div>
+        <div class="step-prog"><span>Step 2 of 3</span><div class="pip p1 lit"></div><div class="pip p2 lit"></div><div class="pip p3"></div></div>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+    <div class="body">
+      <div class="price-block">
+        <div class="pb-row"><span class="pb-muted">Original Total</span><span id="pb-orig">—</span></div>
+        <div class="pb-row"><span class="pb-green">Savings (50%) ℹ</span><span class="pb-green" id="pb-save">—</span></div>
+        <div class="pb-sep"></div>
+        <div class="pb-row"><span class="pb-total">Final Total</span><span class="pb-total" id="pb-final">—</span></div>
+      </div>
+
+```
+  <div class="field-group">
+    <div class="field-lbl">Phone Number <span class="req">*</span></div>
+    <div class="f-wrap"><span class="f-icon">📱</span><input class="f-input" id="phone" type="tel" placeholder="(___) ___-____" oninput="fmtPhone(this)"/></div>
+    <div class="f-note">We'll text you your order tracking link</div>
+  </div>
+
+  <div class="field-group">
+    <div class="field-lbl">Delivery Address <span class="req">*</span></div>
+    <div class="f-wrap"><span class="f-icon">📍</span><input class="f-input" id="addr" type="text" placeholder="Enter your full delivery address..." oninput="chk2()"/></div>
+    <div class="f-warn" id="addrWarn">ℹ Please enter your delivery address</div>
+  </div>
+
+  <div class="field-group">
+    <div class="field-lbl">Apartment / Unit (Optional)</div>
+    <input class="plain-f" id="apt" type="text" placeholder="Apt #, Suite, Unit..."/>
+  </div>
+
+  <div class="field-group">
+    <div class="field-lbl">Delivery Instructions (Optional)</div>
+    <textarea class="textarea-f" id="instructions" placeholder="Leave at door, ring bell, etc."></textarea>
+  </div>
+
+  <div class="sms-row">
+    <input type="checkbox" class="sms-cb" id="smsOk" checked onchange="chk2()"/>
+    <label class="sms-txt" for="smsOk">I agree to receive SMS messages about my order status and promotional offers. Message and data rates may apply. You can opt out at any time.</label>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-back" onclick="go('s1b')">‹ Back</button>
+    <button class="btn-cont" id="s2cont" onclick="goStep3()">Continue →</button>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ══ STEP 3: PAYMENT ══ -->
+
+  <div class="screen" id="s3">
+    <div class="step-bar">
+      <button class="back" onclick="go('s2')">←</button>
+      <div class="step-info">
+        <div class="step-name">Payment</div>
+        <div class="step-prog"><span>Step 3 of 3</span><div class="pip p1 lit"></div><div class="pip p2 lit"></div><div class="pip p3 lit"></div></div>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+    <div class="body">
+      <!-- Restaurant + order -->
+      <div class="summary-card">
+        <div class="sc-left"><div class="sc-ic">🛒</div><div><div class="sc-name" id="p3rest">—</div><div class="sc-sub">DoorDash • USA</div></div></div>
+        <button class="sc-view" onclick="openModal()">View ⌄</button>
+      </div>
+
+```
+  <!-- Address (from what user typed) -->
+  <div class="info-card">
+    <div class="info-ic">📍</div>
+    <div id="p3addr">—</div>
+  </div>
+
+  <!-- Group order link (from what user pasted) -->
+  <div class="link-card-p3">
+    <div class="lcp-lbl">Group Order Link</div>
+    <div class="lcp-url" id="p3link">—</div>
+  </div>
+
+  <!-- Order name -->
+  <div class="name-card">
+    <div class="nc-top">
+      <div class="nc-avatar">👤</div>
+      <div><div class="nc-title">Order Name</div><div class="nc-sub">Name that will appear on the delivery</div></div>
+    </div>
+    <div class="nc-bottom">
+      <div class="nc-name" id="orderName">Guest</div>
+      <button class="nc-edit" onclick="editName()">✏ Edit</button>
+    </div>
+  </div>
+
+  <!-- Tip -->
+  <div class="tip-card">
+    <div class="tip-hdr">
+      <div class="tip-title"><div class="tip-ball">💲</div>Driver Tip</div>
+      <div class="tip-val" id="tipVal">$0.00</div>
+    </div>
+    <div class="tip-grid">
+      <button class="tip-opt" onclick="setTip(this,1)">$1</button>
+      <button class="tip-opt" onclick="setTip(this,2)">$2</button>
+      <button class="tip-opt" onclick="setTip(this,3)">$3</button>
+      <button class="tip-opt" onclick="setTip(this,4)">$4</button>
+    </div>
+    <div class="tip-other"><span>Other: $</span><input class="tip-other-in" type="number" min="0" value="0" oninput="customTip(this)"/></div>
+  </div>
+
+  <!-- Totals -->
+  <div class="totals">
+    <div class="tot-row"><span class="tot-sub">Original Total</span><span id="t-orig">—</span></div>
+    <div class="tot-row"><span class="tot-green">Savings ℹ</span><span class="tot-green" id="t-save">—</span></div>
+    <div class="tot-sep"></div>
+    <div class="tot-row"><span class="tot-final">Final Total</span><span class="tot-final" id="t-final">—</span></div>
+  </div>
+
+  <!-- Crypto payment -->
+  <div class="crypto-box">
+    <div class="cb-header">
+      <div class="cb-title">₿ Pay with Crypto</div>
+      <div class="cb-badge">-$0.93 discount applied</div>
+    </div>
+    <div class="cb-desc">Send the exact amount below to our wallet. Supports Bitcoin, Ethereum, and Solana.</div>
+
+    <!-- Amount to send -->
+    <div class="cb-amount-row">
+      <div class="cb-amount-label">Amount to Send (USD equivalent)</div>
+      <div class="cb-amount-value" id="cryptoAmount">—</div>
+    </div>
+
+    <!-- Coin selector -->
+    <div class="cb-coins">
+      <button class="coin-btn active" onclick="selectCoin(this,'BTC')">₿ BTC</button>
+      <button class="coin-btn" onclick="selectCoin(this,'ETH')">Ξ ETH</button>
+      <button class="coin-btn" onclick="selectCoin(this,'SOL')">◎ SOL</button>
+    </div>
+
+    <!-- Wallet address -->
+    <div class="cb-address-label">Send to this address</div>
+    <div class="cb-address-wrap">
+      <div class="cb-address" id="walletAddr">YOUR_WALLET_ADDRESS_HERE</div>
+      <button class="cb-copy" onclick="copyAddr()" id="copyBtn">Copy</button>
+    </div>
+    <div class="cb-warn">⚠ Double-check the address before sending. Wrong address = lost funds.</div>
+
+    <button class="cb-sent-btn" onclick="openChat()">I've Sent the Payment →</button>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- ══ CHAT CONFIRMATION SCREEN ══ -->
+
+  <div class="screen" id="chat">
+    <div class="step-bar">
+      <button class="back" onclick="go('s3')">←</button>
+      <div class="step-info">
+        <div class="step-name">Confirm Payment</div>
+        <div class="step-prog"><span>Almost done!</span></div>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+    <div class="chat-body">
+      <!-- System messages -->
+      <div class="chat-bubble sys">
+        <div class="sys-icon">✅</div>
+        <div class="sys-text">Payment step initiated. Once we verify your transaction, we'll place your order right away.</div>
+      </div>
+      <div class="chat-bubble sys">
+        <div class="sys-icon">📋</div>
+        <div class="sys-text">
+          Your order total: <strong id="chatTotal">—</strong><br/>
+          Send to: <strong id="chatAddr" style="word-break:break-all;font-size:12px;"></strong>
+        </div>
+      </div>
+      <div class="chat-bubble agent">
+        <div class="agent-avatar">🍕</div>
+        <div class="agent-msg">Hey! Once you've sent the crypto, paste your <strong>transaction ID / hash</strong> here and let me know the amount you sent and which coin. I'll verify it and get your order placed ASAP! 🙌</div>
+      </div>
+
+```
+  <!-- Message history -->
+  <div id="msgHistory"></div>
+</div>
+
+<!-- Input bar -->
+<div class="chat-input-bar">
+  <input class="chat-input" id="chatInput" placeholder="Paste tx hash or type a message..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+  <button class="chat-send" onclick="sendMsg()">Send</button>
+</div>
+```
+
+  </div>
+
+  <!-- ITEMS MODAL -->
+
+  <div class="modal-wrap" id="modal" onclick="closeModal(event)">
+    <div class="modal">
+      <div class="m-handle"></div>
+      <div class="m-title" id="mTitle">Order Items</div>
+      <div class="m-sub" id="mSub"></div>
+      <div id="mItems"></div>
+      <div class="m-total"><span>Total</span><span id="mTotal">—</span></div>
+      <button class="m-close" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+
+  <div class="ov" id="ov" onclick="closeSB()"></div>
+  <div class="sidebar" id="sb">
+    <div class="sb-top">
+      <div class="sb-logo">Smart<b style="color:var(--orange)">Dash</b></div>
+      <button class="sb-x" onclick="closeSB()">✕</button>
+    </div>
+    <div class="sb-user">
+      <div class="sb-u-row"><div class="sb-u-av">👤</div><div><div class="sb-u-name">Guest</div><div class="sb-u-role">Not signed in</div></div></div>
+      <div class="sb-u-btns">
+        <button class="sb-u-btn" onclick="toast('Sign up coming soon!')">Sign Up</button>
+        <button class="sb-u-btn" onclick="toast('Sign in coming soon!')">Sign In</button>
+      </div>
+    </div>
+    <button class="sb-place" onclick="closeSB();go('s1')">⚡ Place Order Now</button>
+    <button class="sb-help" onclick="toast('Text us for help anytime!')">⊙ &nbsp;Help &amp; Support</button>
+    <div class="sb-sec">Explore</div>
+    <button class="sb-lnk" onclick="toast('Mon–Sun 8am–11pm EST')"><span class="i">🕐</span> Operating Hours</button>
+    <button class="sb-lnk" onclick="toast('FAQ coming soon')"><span class="i">❓</span> FAQ</button>
+    <button class="sb-lnk" onclick="toast('We donate meals to local shelters ❤️')"><span class="i">🤍</span> Philanthropy</button>
+  </div>
+
+  <div class="bubble" onclick="openTutorial()">❓</div>
+  <div class="toast" id="tk"></div>
+
+  <!-- TUTORIAL MODAL -->
+
+  <div class="tut-overlay" id="tutOverlay">
+    <div class="tut-sheet">
+
+```
+  <!-- Header -->
+  <div class="tut-header">
+    <div>
+      <div class="tut-step-label" id="tutStepLabel">STEP 1 OF 4</div>
+      <div class="tut-title">Four quick steps to save</div>
+      <div class="tut-sub">Do these in DoorDash, then paste the link below.</div>
+    </div>
+    <button class="tut-close" onclick="closeTutorial()">✕</button>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="tut-prog-bar"><div class="tut-prog-fill" id="tutFill"></div></div>
+
+  <!-- Steps -->
+  <div class="tut-body" id="tutBody"></div>
+
+  <!-- Footer -->
+  <div class="tut-footer">
+    <button class="tut-skip" onclick="closeTutorial()">Skip tutorial</button>
+    <div class="tut-footer-right">
+      <span class="tut-count" id="tutCount">1/4</span>
+      <div class="tut-btns">
+        <button class="tut-back-btn" id="tutBackBtn" onclick="tutPrev()">Back</button>
+        <button class="tut-next-btn" id="tutNextBtn" onclick="tutNext()">Next step</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+/* ── STATE ── */
+const S = { link:'', items:[], origTotal:0, savings:0, final:0, address:'', tip:0 };
+
+/* ── NAV ── */
+function go(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+/* ── SIDEBAR ── */
+function openSB(){ document.getElementById('sb').classList.add('open'); document.getElementById('ov').classList.add('open'); }
+function closeSB(){ document.getElementById('sb').classList.remove('open'); document.getElementById('ov').classList.remove('open'); }
+
+/* ── STEP 1: LINK VALIDATION ── */
+// Simple check - just needs to be a doordash link
+function isGroup(u){
+  return u.includes('doordash') || u.includes('drd.sh') || u.includes('/cart/');
+}
+
+const BACKEND_URL = "YOUR_RENDER_URL_HERE";
+let vTimer=null, validated=false;
+
+function onLink(){
+  const v = document.getElementById('cartLink').value.trim();
+  validated=false;
+  hide('vbox'); show('lf'); hide('vf');
+  show('cpill'); show('fhint'); hide('ferr');
+  setBtn('s1btn',false,'Enter a valid DoorDash group link to continue');
+  clearTimeout(vTimer);
+  if(v.length < 6) return;
+  // Start validating after short pause
+  vTimer = setTimeout(()=>startVal(v), 500);
+}
+
+async function startVal(url){
+  // Normalize URL
+  if(url.startsWith('/cart/')) url = 'https://drd.sh' + url;
+  else if(!url.startsWith('http')) url = 'https://' + url;
+  S.link = url;
+
+  hide('lf'); showFlex('vf');
+  document.getElementById('vUrl').textContent = url;
+  hide('cpill'); hide('fhint');
+  setBtn('s1btn', false, 'Reading your cart...');
+
+  // If backend not set up yet, skip straight to delivery
+  if(BACKEND_URL === 'YOUR_RENDER_URL_HERE'){
+    await new Promise(r => setTimeout(r, 1400)); // fake loading
+    hide('vf'); show('lf');
+    S.restaurant = 'Your DoorDash Order';
+    S.items      = [];
+    S.origTotal  = 0;
+    S.savings    = 0;
+    S.final      = 0;
+    document.getElementById('vRestaurant').textContent = 'DoorDash Group Order';
+    document.getElementById('vItemCount').textContent  = 'Link received ✓';
+    document.getElementById('vSubtotal').textContent   = 'Pricing calculated at checkout';
+    document.getElementById('vLinkShort').textContent  = url;
+    show('vbox');
+    validated = true;
+    setBtn('s1btn', true, 'Continue to Delivery →');
+    return;
+  }
+
+  // Real backend call
+  try {
+    const resp = await fetch(BACKEND_URL + '/cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ link: url })
+    });
+    const data = await resp.json();
+    if (!resp.ok || !data.success) throw new Error(data.error || 'Could not read cart');
+
+    S.restaurant = data.restaurant;
+    S.items      = data.items;
+    S.origTotal  = data.subtotal;
+    S.savings    = data.savings;
+    S.final      = data.finalTotal;
+
+    hide('vf'); show('lf');
+    document.getElementById('vRestaurant').textContent = data.restaurant;
+    document.getElementById('vItemCount').textContent  = data.items.length + ' item' + (data.items.length!==1?'s':'');
+    document.getElementById('vSubtotal').textContent   = '$' + data.subtotal.toFixed(2) + ' original total';
+    document.getElementById('vLinkShort').textContent  = url;
+    show('vbox');
+    validated = true;
+    setBtn('s1btn', true, 'Continue to Delivery →');
+
+  } catch(err) {
+    hide('vf'); show('lf');
+    show('cpill');
+    document.getElementById('ferr').innerHTML = '⚠ Could not read cart — check the link and try again.';
+    showEl('ferr');
+    setBtn('s1btn', false, 'Enter a valid DoorDash group link to continue');
+    validated = false;
+  }
+}
+function clearLink(){
+  document.getElementById('cartLink').value='';
+  validated=false; clearTimeout(vTimer);
+  hide('vbox'); hide('vf'); show('lf');
+  show('cpill'); show('fhint'); hide('ferr');
+  setBtn('s1btn',false,'Enter a valid DoorDash group link to continue');
+}
+
+function goAddItems(){
+  if(!validated){ toast('Please paste your DoorDash group link first'); return; }
+  document.getElementById('pb-orig').textContent  = S.origTotal > 0 ? '$'+S.origTotal.toFixed(2) : 'TBD';
+  document.getElementById('pb-save').textContent  = S.savings > 0 ? '-$'+S.savings.toFixed(2) : 'TBD';
+  document.getElementById('pb-final').textContent = S.final > 0 ? '$'+S.final.toFixed(2) : 'TBD';
+  go('s2');
+}
+
+/* ── STEP 1b: ITEMS ── */
+let itemId=0;
+function addItem(){
+  itemId++;
+  const id=itemId;
+  const div=document.createElement('div');
+  div.className='item-row';
+  div.id='item-'+id;
+  div.innerHTML=`
+    <div class="item-qty-wrap">
+      <button class="qty-btn" onclick="changeQty(${id},1)">+</button>
+      <div class="qty-num" id="qty-${id}">1</div>
+      <button class="qty-btn" onclick="changeQty(${id},-1)">−</button>
+    </div>
+    <div class="item-fields">
+      <input class="item-name-input" placeholder="Item name (e.g. Spicy Chicken Sandwich)" oninput="calcTotal()"/>
+      <input class="item-mod-input" placeholder="Customizations (optional, e.g. no pickles)"/>
+      <div class="item-price-row">
+        <span class="price-prefix">$</span>
+        <input class="item-price-input" type="number" min="0" step="0.01" placeholder="0.00" oninput="calcTotal()"/>
+      </div>
+    </div>
+    <button class="del-item" onclick="removeItem(${id})">✕</button>`;
+  document.getElementById('itemsList').appendChild(div);
+  calcTotal();
+}
+
+function changeQty(id, delta){
+  const el=document.getElementById('qty-'+id);
+  let q=parseInt(el.textContent)+delta;
+  if(q<1) q=1;
+  el.textContent=q;
+  calcTotal();
+}
+
+function removeItem(id){
+  const el=document.getElementById('item-'+id);
+  if(el) el.remove();
+  calcTotal();
+}
+
+function calcTotal(){
+  let total=0;
+  document.querySelectorAll('.item-row').forEach(row=>{
+    const qEl=row.querySelector('.qty-num');
+    const pEl=row.querySelector('.item-price-input');
+    const q=parseInt(qEl?.textContent||1);
+    const p=parseFloat(pEl?.value||0);
+    if(!isNaN(p)) total+=q*p;
+  });
+  S.origTotal=parseFloat(total.toFixed(2));
+  S.savings=parseFloat((S.origTotal*0.5).toFixed(2));
+  S.final=parseFloat((S.origTotal-S.savings).toFixed(2));
+  document.getElementById('orderTotalDisplay').textContent='$'+S.origTotal.toFixed(2);
+}
+
+function getItems(){
+  const items=[];
+  document.querySelectorAll('.item-row').forEach(row=>{
+    const q=parseInt(row.querySelector('.qty-num').textContent||1);
+    const name=row.querySelector('.item-name-input').value.trim();
+    const mod=row.querySelector('.item-mod-input').value.trim();
+    const p=parseFloat(row.querySelector('.item-price-input').value||0);
+    if(name) items.push({qty:q,name,mod,price:p});
+  });
+  return items;
+}
+
+function goStep2(){
+  S.items=getItems();
+  if(S.items.length===0){ toast('Add at least one item to continue'); return; }
+  calcTotal();
+  document.getElementById('pb-orig').textContent='$'+S.origTotal.toFixed(2);
+  document.getElementById('pb-save').textContent='-$'+S.savings.toFixed(2);
+  document.getElementById('pb-final').textContent='$'+S.final.toFixed(2);
+  go('s2');
+}
+
+/* ── STEP 2 ── */
+function fmtPhone(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length>=6) v='('+v.slice(0,3)+') '+v.slice(3,6)+'-'+v.slice(6,10);
+  else if(v.length>=3) v='('+v.slice(0,3)+') '+v.slice(3);
+  el.value=v; chk2();
+}
+function chk2(){
+  const ph=document.getElementById('phone').value.trim();
+  const addr=document.getElementById('addr').value.trim();
+  const sms=document.getElementById('smsOk').checked;
+  const ok=ph.length>=14&&addr.length>5&&sms;
+  document.getElementById('s2cont').classList.toggle('on',ok);
+  document.getElementById('addrWarn').style.display=addr.length>0?'none':'block';
+}
+document.getElementById('addr').addEventListener('input',chk2);
+
+function goStep3(){
+  const addr=document.getElementById('addr').value.trim();
+  const apt=document.getElementById('apt').value.trim();
+  S.address=addr+(apt?', '+apt:'');
+  S.tip=0;
+  // populate step 3
+  document.getElementById('p3rest').textContent=S.items[0]?.name?'Your Order':' Your Order';
+  document.getElementById('p3addr').textContent=S.address;
+  document.getElementById('p3link').textContent=S.link;
+  document.getElementById('t-orig').textContent='$'+S.origTotal.toFixed(2);
+  document.getElementById('t-save').textContent='-$'+S.savings.toFixed(2);
+  document.getElementById('t-final').textContent='$'+S.final.toFixed(2);
+  document.getElementById('tipVal').textContent='$0.00';
+  document.querySelectorAll('.tip-opt').forEach(b=>b.classList.remove('sel'));
+  document.querySelector('.tip-other-in').value=0;
+  // set crypto amount (final - $0.93 discount)
+  const cryptoAmt = (S.final - 0.93).toFixed(2);
+  document.getElementById('cryptoAmount').textContent = '$' + cryptoAmt + ' USD';
+  document.getElementById('walletAddr').textContent = WALLETS['BTC'];
+  document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.coin-btn')[0].classList.add('active');
+  selectedCoin = 'BTC'; replyIdx = 0;
+  go('s3');
+}
+
+/* ── STEP 3 ── */
+function setTip(btn,val){
+  document.querySelectorAll('.tip-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.querySelector('.tip-other-in').value=0;
+  S.tip=val;
+  document.getElementById('tipVal').textContent='$'+val+'.00';
+  updFinal();
+}
+function customTip(el){
+  document.querySelectorAll('.tip-opt').forEach(b=>b.classList.remove('sel'));
+  S.tip=parseFloat(el.value)||0;
+  document.getElementById('tipVal').textContent='$'+S.tip.toFixed(2);
+  updFinal();
+}
+function updFinal(){
+  const f=S.final+S.tip;
+  document.getElementById('t-final').textContent='$'+f.toFixed(2);
+}
+function editName(){
+  const n=prompt('Enter the name for your delivery:','Guest');
+  if(n&&n.trim()) document.getElementById('orderName').textContent=n.trim();
+}
+// ── YOUR WALLET ADDRESSES — replace these with your real ones ──
+const WALLETS = {
+  BTC:  'YOUR_BITCOIN_ADDRESS_HERE',
+  ETH:  'YOUR_ETHEREUM_ADDRESS_HERE',
+  SOL:  'YOUR_SOLANA_ADDRESS_HERE',
+};
+let selectedCoin = 'BTC';
+
+function selectCoin(btn, coin){
+  document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedCoin = coin;
+  document.getElementById('walletAddr').textContent = WALLETS[coin];
+}
+
+function copyAddr(){
+  const addr = WALLETS[selectedCoin];
+  navigator.clipboard.writeText(addr).then(()=>{
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.style.background = '#22c55e';
+    setTimeout(()=>{ btn.textContent='Copy'; btn.style.background=''; }, 2000);
+  }).catch(()=> toast('Copy failed — select and copy manually'));
+}
+
+function openChat(){
+  // populate chat screen with order info
+  const total = (S.final + S.tip - 0.93).toFixed(2);
+  document.getElementById('chatTotal').textContent = '$' + total + ' USD';
+  document.getElementById('chatAddr').textContent  = WALLETS[selectedCoin] + ' (' + selectedCoin + ')';
+  document.getElementById('cryptoAmount').textContent = '$' + total + ' USD';
+  document.getElementById('msgHistory').innerHTML = '';
+  document.getElementById('chatInput').value = '';
+  go('chat');
+}
+
+// ── CHAT ──
+const autoReplies = [
+  "Got it! Give me a moment to verify the transaction on the blockchain 🔍",
+  "Looking good! I can see the transaction. Placing your order now... 🚀",
+  "Your order has been placed! You'll get a text with the tracking link shortly 🎉",
+];
+let replyIdx = 0;
+
+function sendMsg(){
+  const input = document.getElementById('chatInput');
+  const text  = input.value.trim();
+  if(!text) return;
+  input.value = '';
+
+  // Add user message
+  const history = document.getElementById('msgHistory');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'chat-bubble user-msg';
+  userDiv.innerHTML = `<div class="user-bubble">${text}</div>`;
+  history.appendChild(userDiv);
+
+  // Scroll to bottom
+  const body = document.querySelector('.chat-body');
+  body.scrollTop = body.scrollHeight;
+
+  // Auto-reply from "agent"
+  const reply = autoReplies[replyIdx] || "Thanks! We're on it 👍";
+  replyIdx = Math.min(replyIdx+1, autoReplies.length-1);
+
+  setTimeout(()=>{
+    const agentDiv = document.createElement('div');
+    agentDiv.className = 'chat-bubble agent-reply';
+    agentDiv.innerHTML = `
+      <div class="agent-avatar">🍕</div>
+      <div class="agent-reply-msg">${reply}</div>`;
+    history.appendChild(agentDiv);
+    body.scrollTop = body.scrollHeight;
+  }, 1200);
+}
+
+/* ── MODAL ── */
+function openModal(){
+  const items=S.items.length?S.items:getItems();
+  document.getElementById('mTitle').textContent='Your Order';
+  document.getElementById('mSub').textContent=items.length+' item(s) • $'+S.origTotal.toFixed(2);
+  document.getElementById('mTotal').textContent='$'+S.origTotal.toFixed(2);
+  let html='';
+  items.forEach(it=>{
+    html+=`<div class="m-item">
+      <div class="m-item-l"><div class="m-qty">${it.qty}</div><div><div class="m-name">${it.name||'—'}</div>${it.mod?`<div class="m-mod">${it.mod}</div>`:''}</div></div>
+      <div class="m-price">$${(it.price*it.qty).toFixed(2)}</div>
+    </div>`;
+  });
+  document.getElementById('mItems').innerHTML=html||'<p style="color:#aaa;font-size:13px;padding:10px 0">No items added yet</p>';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(e){ if(!e||e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open'); }
+
+/* ── HELPERS ── */
+function show(id){ document.getElementById(id).style.display='block'; }
+function showFlex(id){ document.getElementById(id).style.display='flex'; }
+function showEl(id){ document.getElementById(id).style.display='flex'; }
+function hide(id){ document.getElementById(id).style.display='none'; }
+function setBtn(id,on,txt){ const b=document.getElementById(id); b.classList.toggle('on',on); b.textContent=txt; }
+
+
+let tt;
+function toast(msg){ const el=document.getElementById('tk'); el.textContent=msg; el.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('show'),2600); }
+
+const TUT_STEPS = [
+  {
+    num: 1,
+    action: "Tap 'Group Order' on restaurant",
+    imgEmoji: '🍔',
+    imgDesc: 'DoorDash restaurant page showing the Group Order tab highlighted',
+    descTitle: "Press 'Group Order' on the restaurant",
+    descText: "On the restaurant page in DoorDash, tap 'Group Order' to get started.",
+  },
+  {
+    num: 2,
+    action: "Press 'Start Group Order'",
+    imgEmoji: '👥',
+    imgDesc: 'DoorDash Start Group Order popup',
+    descTitle: "Press 'Start Group Order'",
+    descText: "When the pop-up appears, press 'Start Group Order' to generate your shareable link.",
+  },
+  {
+    num: 3,
+    action: "Copy link",
+    imgEmoji: '🔗',
+    imgDesc: 'DoorDash Invite others screen with Copy Link button highlighted',
+    descTitle: "Copy the link",
+    descText: "Copy the group order link the app gives you so we can slash the delivery price.",
+  },
+  {
+    num: 4,
+    action: "Paste here & save",
+    imgEmoji: '💸',
+    imgDesc: 'Paste link to save 40-50%',
+    descTitle: "Paste & save 40–50%",
+    descText: "Paste the link into SmartDash and we'll automatically apply your discount.",
+    isFinal: true,
+  },
+];
+
+let tutStep = 0;
+
+function openTutorial(){
+  tutStep = 0;
+  renderTutStep();
+  document.getElementById('tutOverlay').classList.add('open');
+}
+function closeTutorial(){
+  document.getElementById('tutOverlay').classList.remove('open');
+}
+function tutNext(){
+  if(tutStep < TUT_STEPS.length - 1){ tutStep++; renderTutStep(); }
+  else { closeTutorial(); go('s1'); }
+}
+function tutPrev(){
+  if(tutStep > 0){ tutStep--; renderTutStep(); }
+}
+function renderTutStep(){
+  const s = TUT_STEPS[tutStep];
+  const total = TUT_STEPS.length;
+
+  document.getElementById('tutStepLabel').textContent = `STEP ${tutStep+1} OF ${total}`;
+  document.getElementById('tutCount').textContent = `${tutStep+1}/${total}`;
+  document.getElementById('tutFill').style.width = `${((tutStep+1)/total)*100}%`;
+  document.getElementById('tutBackBtn').style.display = tutStep === 0 ? 'none' : 'block';
+  document.getElementById('tutNextBtn').textContent = s.isFinal ? 'Start saving' : 'Next step';
+
+  document.getElementById('tutBody').innerHTML = `
+    <div class="tut-step-num">
+      <div class="tut-num-badge">${s.num}</div>
+      <div class="tut-step-action">${s.action}</div>
+    </div>
+    <div class="tut-img-card">
+      <div style="text-align:center;">
+        <div style="font-size:64px;margin-bottom:10px;">${s.imgEmoji}</div>
+        <div style="font-size:12px;color:var(--sub);max-width:200px;margin:0 auto;line-height:1.4;">${s.imgDesc}</div>
+      </div>
+    </div>
+    <div class="tut-desc-title">${s.descTitle}</div>
+    <div class="tut-desc-text">${s.descText}</div>
+    ${s.isFinal ? `<div class="tut-paste-cta">💰 Paste the link here to automatically slash 40–50% off.</div>` : ''}
+  `;
+}
+
+</script>
+
+</body>
+</html>
