@@ -624,6 +624,10 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 
   <footer>
     <div class="footer-logo">Half<span>Eats</span></div>
+    <div style="display:flex;gap:20px;align-items:center;">
+      <a href="#" onclick="openLegal('home');return false;" style="color:#9ca3af;font-size:13px;text-decoration:none;">Legal</a>
+      <a href="#" onclick="openLegal('home');return false;" style="color:#9ca3af;font-size:13px;text-decoration:none;">Terms</a>
+    </div>
     <div class="footer-right">© 2026 HalfEats. All rights reserved.</div>
   </footer>
 </div>
@@ -747,6 +751,139 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
   <button class="btn-back" onclick="showPage('s1')">‹ Back</button>
   <button class="btn-cont" id="s2cont" onclick="goStep3()">Continue →</button>
 </div>
+```
+
+  </div>
+</div>
+
+<!-- ══ LEGAL PAGE ══ -->
+
+<div class="page" id="legal">
+  <div style="max-width:700px;margin:0 auto;padding:40px 20px 80px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;">
+      <button onclick="showPage(legalFrom)" style="background:none;border:none;color:#9ca3af;font-size:22px;cursor:pointer;">←</button>
+      <div>
+        <div style="font-weight:800;font-size:20px;">Legal & Terms</div>
+        <div style="font-size:12px;color:#9ca3af;margin-top:2px;">Last updated: April 2026</div>
+      </div>
+    </div>
+
+```
+<!-- Section helper style inline -->
+<div style="display:flex;flex-direction:column;gap:24px;">
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">1. Service Overview</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats is an independent order facilitation service. We act as an authorized agent on behalf of customers to place food delivery orders through third-party platforms such as DoorDash. We are not affiliated with, endorsed by, or partnered with DoorDash or any other delivery platform. By using HalfEats you agree to these terms in full.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">2. Payments</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">All payments are made in cryptocurrency (Bitcoin or Solana). By submitting payment you acknowledge that crypto transactions are irreversible and final. HalfEats is not responsible for funds sent to an incorrect wallet address. You are solely responsible for verifying the correct wallet address before sending any funds. We will not process your order until payment is verified.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">3. Refund Policy</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">All sales are final. HalfEats does not issue refunds for completed orders. A refund may only be considered in the following circumstance: your order was canceled directly by DoorDash and you can provide confirmation of the cancellation. Refunds are not issued for late deliveries, missing items, incorrect orders, or driver-related issues. These matters must be addressed directly with DoorDash support.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">4. Delivery & Order Issues</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">Once an order is placed and confirmed, HalfEats bears no responsibility for what occurs during or after delivery. This includes but is not limited to: stolen packages, lost orders, delivery delays, incorrect deliveries, damaged food, or driver misconduct. All delivery-related issues are the responsibility of the delivery platform (DoorDash) and its drivers.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">5. Order Accuracy</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">You are fully responsible for ensuring that your DoorDash group order link, delivery address, order total, and any other information submitted to HalfEats is accurate and correct. We place orders exactly as submitted. Errors in information provided by the customer are not grounds for a refund or cancellation.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">6. Order Limits</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats currently accepts orders with a minimum subtotal of $25.00 and a maximum subtotal of $40.00. Orders outside this range will not be processed. These limits may change at any time without notice.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">7. Availability</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats is not available 24/7. We reserve the right to close the service at any time without notice. Orders will not be accepted when the service is marked as closed. We are not liable for any inconvenience caused by service unavailability.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">8. Limitation of Liability</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats and its operators shall not be held liable for any direct, indirect, incidental, or consequential damages arising from the use of this service. By using HalfEats you agree that your sole remedy for any issue is to stop using the service. Our total liability to you for any claim shall not exceed the amount you paid for the specific order in question, and only in cases where a DoorDash cancellation can be confirmed.</div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">9. Contact</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">For any questions, concerns, or order support please contact us on Telegram: <a href="https://t.me/miningadminpro" style="color:#f97316;text-decoration:none;">@miningadminpro</a></div>
+  </div>
+
+  <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
+    <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">10. Changes to Terms</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats reserves the right to update these terms at any time. Continued use of the service after any changes constitutes acceptance of the new terms. It is your responsibility to review these terms periodically.</div>
+  </div>
+
+</div>
+
+<button onclick="showPage(legalFrom)" style="width:100%;margin-top:32px;background:#f97316;color:#fff;border:none;border-radius:14px;padding:16px;font-family:'Inter',sans-serif;font-weight:800;font-size:15px;cursor:pointer;">← Back</button>
+```
+
+  </div>
+</div>
+
+<!-- ══ TERMS PAGE ══ -->
+
+<div class="page" id="terms">
+  <div class="flow-wrap">
+    <div class="flow-header">
+      <button class="flow-back" onclick="showPage('s2')">←</button>
+      <div>
+        <div class="flow-title">Before You Pay</div>
+        <div class="flow-step">Quick heads up</div>
+      </div>
+      <div style="width:32px"></div>
+    </div>
+
+```
+<div style="background:#1c1c1c;border:1px solid #2a2a2a;border-radius:18px;padding:22px;margin-bottom:20px;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+    <div style="font-size:24px;">📋</div>
+    <div style="font-weight:800;font-size:16px;">Order Agreement</div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#9ca3af;line-height:1.6;">
+      <span style="color:#f97316;font-size:16px;flex-shrink:0;">•</span>
+      <span>Once your order is placed, HalfEats is <strong style="color:#f5f5f5;">not responsible</strong> for lost, stolen, or damaged deliveries — those are on DoorDash and the driver.</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#9ca3af;line-height:1.6;">
+      <span style="color:#f97316;font-size:16px;flex-shrink:0;">•</span>
+      <span><strong style="color:#f5f5f5;">No refunds</strong> unless DoorDash itself cancels the order. Missing items, late delivery, or driver issues are not eligible.</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#9ca3af;line-height:1.6;">
+      <span style="color:#f97316;font-size:16px;flex-shrink:0;">•</span>
+      <span>Crypto payments are <strong style="color:#f5f5f5;">final and irreversible.</strong> Double-check the wallet address before sending.</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#9ca3af;line-height:1.6;">
+      <span style="color:#f97316;font-size:16px;flex-shrink:0;">•</span>
+      <span>You are responsible for making sure your link, address, and order total are <strong style="color:#f5f5f5;">correct before submitting.</strong></span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#9ca3af;line-height:1.6;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:12px;">
+      <span style="color:#f97316;font-size:16px;flex-shrink:0;">⚠</span>
+      <span><strong style="color:#f97316;">After paying you MUST contact us on Telegram <a href="https://t.me/miningadminpro" style="color:#f97316;">@miningadminpro</a> with your transaction ID.</strong> If you do not reach out we have no way of knowing you paid and your order will not be placed. No contact = no order, no refund.</span>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;padding-top:14px;border-top:1px solid #2a2a2a;text-align:center;">
+    <a href="#" onclick="openLegal('home');return false;" style="font-size:12px;color:#9ca3af;text-decoration:none;">📄 Read full Terms & Conditions →</a>
+  </div>
+</div>
+
+<button onclick="agreeAndPay()" style="width:100%;background:#22c55e;color:#fff;border:none;border-radius:14px;padding:17px;font-family:'Inter',sans-serif;font-weight:800;font-size:15px;cursor:pointer;margin-bottom:10px;">
+  ✓ I Agree — Continue to Payment
+</button>
+<button onclick="showPage('s2')" style="width:100%;background:none;border:1.5px solid #2a2a2a;border-radius:14px;padding:14px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;color:#9ca3af;">
+  ← Go Back
+</button>
 ```
 
   </div>
@@ -924,6 +1061,7 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
   <button class="sb-lnk" onclick="toast('Mon–Sun 8am–11pm EST')"><span class="i">🕐</span> Operating Hours</button>
   <button class="sb-lnk" onclick="closeSB();document.getElementById('faqSection').scrollIntoView({behavior:'smooth'})"><span class="i">❓</span> FAQ</button>
   <button class="sb-lnk" onclick="closeSB();document.getElementById('reviewSection').scrollIntoView({behavior:'smooth'})"><span class="i">⭐</span> Reviews</button>
+  <button class="sb-lnk" onclick="closeSB();openLegal('home')"><span class="i">📄</span> Legal & Terms</button>
 </div>
 
 <div class="bubble" onclick="openTutorial()">❓</div>
@@ -1132,6 +1270,17 @@ function goStep3(){
   document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.coin-btn')[0].classList.add('active');
   selectedCoin='BTC'; replyIdx=0;
+  showPage('terms');
+}
+
+let legalFrom = 'home';
+
+function openLegal(from){
+  legalFrom = from || 'home';
+  showPage('legal');
+}
+
+function agreeAndPay(){
   showPage('s3');
 }
 
