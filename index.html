@@ -5,7 +5,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="color-scheme" content="dark"/>
-<title>HalfEats — 50% Off Food Delivery</title>
+<title>HalfEats — 40% Off Food Delivery</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 :root { color-scheme: dark only; }
@@ -425,6 +425,12 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 </head>
 <body>
 
+<!-- CLOSED BANNER (hidden when open) -->
+
+<div id="closedBanner" style="display:none;position:fixed;top:60px;left:0;right:0;z-index:90;background:#ef4444;color:#fff;text-align:center;padding:12px 20px;font-weight:700;font-size:14px;">
+  🔴 We're currently closed — check back soon!
+</div>
+
 <!-- NAV -->
 
 <nav>
@@ -435,7 +441,7 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
   <div class="nav-right">
     <a class="nav-link" href="#">How It Works</a>
     <a class="nav-link" href="#">FAQ</a>
-    <a class="nav-btn" href="#" onclick="showPage('s1');return false;">Order Now</a>
+    <a class="nav-btn" id="orderNowBtn" href="#" onclick="tryOrder();return false;">Order Now</a>
   </div>
 </nav>
 
@@ -443,9 +449,9 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 
 <div class="page active" id="home">
   <div class="hero">
-    <div class="hero-badge">🟢 Live — Accepting Orders Now</div>
+    <div class="hero-badge" id="statusBadge">🟢 Live — Accepting Orders Now</div>
     <h1>Your favorite food,<br><span>half the price.</span></h1>
-    <p class="hero-sub">Paste your DoorDash group order link and we slash 40–50% off. Same food, same delivery, way less money.</p>
+    <p class="hero-sub">Paste your DoorDash group order link and we slash 40% off. Same food, same delivery, way less money.</p>
 
 ```
 <div class="price-compare">
@@ -456,14 +462,14 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
   <div class="price-arrow">→</div>
   <div class="price-box after">
     <div class="price-label">Your Price</div>
-    <div class="price-amount">$16.99</div>
-    <div class="price-save">You save $16.98 (50%)</div>
+    <div class="price-amount">$20.38</div>
+    <div class="price-save">You save $11.99 (40%)</div>
   </div>
 </div>
 
 <div class="hero-input-wrap">
   <input class="hero-input" id="homeInput" placeholder="Paste your DoorDash group link..." type="text"/>
-  <button class="hero-cta" onclick="goFromHome()">Get 50% Off →</button>
+  <button class="hero-cta" onclick="tryOrder()">Get 40% Off →</button>
 </div>
 <p class="hero-hint">Not sure how? <a href="#" onclick="openTutorial();return false;">See the 4-step guide →</a></p>
 <div class="stars-row"><span class="stars">★★★★★</span><span>4.8 · 200+ happy customers</span></div>
@@ -490,7 +496,7 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
       <div class="step-card">
         <div class="step-num">3</div>
         <h3>Pay & Save</h3>
-        <p>Pay via crypto and get 40–50% off instantly. We place the order and you get your food.</p>
+        <p>Pay via crypto and get 40–40% off instantly. We place the order and you get your food.</p>
       </div>
     </div>
   </div>
@@ -541,7 +547,7 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 
   <div class="cta-bottom">
     <h2>Stop overpaying<br>for <span>delivery.</span></h2>
-    <p>Join hundreds saving 40–50% on every order.</p>
+    <p>Join hundreds saving 40% on every order.</p>
     <button class="nav-btn" style="font-size:16px;padding:14px 32px;" onclick="showPage('s1')">Start Saving Now →</button>
   </div>
 
@@ -567,40 +573,32 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 ```
 <div style="text-align:center;margin-bottom:28px;">
   <h2 style="font-size:clamp(26px,5vw,38px);font-weight:900;letter-spacing:-1px;margin-bottom:10px;">Slash Your Food Bills</h2>
-  <p style="color:#9ca3af;font-size:14px;line-height:1.6;">We automatically find and apply discounts you didn't know you had.</p>
+  <p style="color:#9ca3af;font-size:14px;line-height:1.6;">Paste your DoorDash group link below and we'll handle the rest.</p>
 </div>
 
 <div class="flow-card">
   <div class="fc-label">DoorDash Group Link</div>
-  <div id="lf" class="link-field">
+  <div class="link-field" style="border-color:#2a2a2a;">
     <span style="font-size:16px;color:#555">🔗</span>
     <input type="text" id="cartLink" placeholder="Paste your group order link here..." oninput="onLink()" onpaste="setTimeout(onLink,10)"/>
     <button class="clr-btn" onclick="clearLink()">↺</button>
   </div>
-  <div id="vf" class="val-field">
-    <div class="spin"></div>
-    <div class="val-url" id="vUrl"></div>
-    <button class="clr-btn" onclick="clearLink()">↺</button>
-  </div>
-  <div id="ferr" class="field-error">⚠ Please paste a DoorDash group order link</div>
+  <div id="ferr" class="field-error" style="display:none;">⚠ Please paste a DoorDash group order link</div>
   <div id="fhint" class="field-hint">Use "Start Group Order" in DoorDash, then copy & paste the link here</div>
-  <div id="vbox" class="validated-box">
-    <div class="val-ok">✅ Cart Read Successfully!</div>
-    <div class="val-rows">
-      <div class="vr"><span class="vr-ic">🍽</span><span id="vRestaurant" style="font-weight:600;color:#f5f5f5;"></span></div>
-      <div class="vr"><span class="vr-ic">✓</span><span id="vItemCount"></span></div>
-      <div class="vr"><span class="vr-ic">💳</span><span id="vSubtotal"></span></div>
-      <div class="vr"><span class="vr-ic">🔗</span><span id="vLinkShort" style="font-size:11px;word-break:break-all;"></span></div>
-    </div>
-    <button class="view-order-btn" onclick="openModal()">View Order Items ⌄</button>
+
+  <!-- Link confirmed -->
+  <div id="vbox" style="display:none;background:#0f2a1a;border:1px solid rgba(34,197,94,0.3);border-radius:12px;padding:14px;margin-top:10px;">
+    <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;color:#22c55e;margin-bottom:8px;">✅ Link received!</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.6;">We got your DoorDash link. Continue to enter your delivery details and we'll take care of the rest.</div>
   </div>
-  <div id="cpill" class="country-row">
-    <div><div class="cr-name">USA</div><div class="cr-platform">DoorDash <span class="off-tag">50% off</span></div></div>
+
+  <div id="cpill" class="country-row" style="margin-top:10px;">
+    <div><div class="cr-name">USA</div><div class="cr-platform">DoorDash <span class="off-tag">40% off</span></div></div>
     <div class="cr-price">$25–$30</div>
   </div>
 </div>
 
-<button class="primary-btn" id="s1btn" onclick="goAddItems()">Enter a valid DoorDash group link to continue</button>
+<button class="primary-btn" id="s1btn" onclick="goAddItems()">Enter your DoorDash group link to continue</button>
 
 <div class="how-box">
   <div class="how-title"><div class="how-ic">💡</div> How to get your group link</div>
@@ -628,10 +626,20 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 
 ```
 <div class="price-block">
-  <div class="pb-row"><span class="pb-muted">Original Total</span><span id="pb-orig">—</span></div>
-  <div class="pb-row"><span class="pb-green">Savings (50%) ℹ</span><span class="pb-green" id="pb-save">—</span></div>
+  <div class="pb-row"><span class="pb-muted">Original Total</span><span id="pb-orig">Enter below ↓</span></div>
+  <div class="pb-row"><span class="pb-green">Your Savings (40%)</span><span class="pb-green" id="pb-save">—</span></div>
   <div class="pb-sep"></div>
-  <div class="pb-row"><span class="pb-total">Final Total</span><span class="pb-total" id="pb-final">—</span></div>
+  <div class="pb-row"><span class="pb-total">You Pay</span><span class="pb-total" id="pb-final">—</span></div>
+</div>
+
+<!-- Order total input -->
+<div class="field-group">
+  <div class="field-lbl">Your DoorDash Order Total <span class="req">*</span></div>
+  <div class="f-wrap">
+    <span class="f-icon">💰</span>
+    <input class="f-input" id="orderTotal" type="number" min="0" step="0.01" placeholder="Enter the total shown in DoorDash (e.g. 34.99)" oninput="calcFromTotal()"/>
+  </div>
+  <div class="f-note">Open DoorDash → your cart → enter the subtotal shown before checkout</div>
 </div>
 
 <div class="field-group">
@@ -707,13 +715,21 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
   <div class="tot-row"><span class="tot-final">Final Total</span><span class="tot-final" id="t-final">—</span></div>
 </div>
 
+<!-- Telegram banner - always visible -->
+<div style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+  <div>
+    <div style="font-weight:700;font-size:13px;color:#f97316;margin-bottom:3px;">📱 After Paying</div>
+    <div style="font-size:12px;color:#9ca3af;line-height:1.5;">Send your transaction ID on Telegram to confirm your order</div>
+  </div>
+  <a href="https://t.me/miningadminpro" target="_blank" style="background:#f97316;color:#fff;font-weight:700;font-size:12px;padding:8px 12px;border-radius:9px;text-decoration:none;white-space:nowrap;flex-shrink:0;">@miningadminpro</a>
+</div>
+
 <div class="crypto-box">
-  <div class="cb-header"><div class="cb-title">₿ Pay with Crypto</div><div class="cb-badge">-$0.93 discount</div></div>
-  <div class="cb-desc">Send the exact amount to our wallet. Accepts Bitcoin, Ethereum, and Solana.</div>
+  <div class="cb-header"><div class="cb-title">₿ Pay with Crypto</div></div>
+  <div class="cb-desc">Send the exact amount to our wallet. Accepts Bitcoin and Solana.</div>
   <div class="cb-amount-row"><div class="cb-amount-label">Amount to Send (USD equivalent)</div><div class="cb-amount-value" id="cryptoAmount">—</div></div>
   <div class="cb-coins">
     <button class="coin-btn active" onclick="selectCoin(this,'BTC')">₿ BTC</button>
-    <button class="coin-btn" onclick="selectCoin(this,'ETH')">Ξ ETH</button>
     <button class="coin-btn" onclick="selectCoin(this,'SOL')">◎ SOL</button>
   </div>
   <div class="cb-address-label">Send to this address</div>
@@ -740,9 +756,15 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
       </div>
     </div>
     <div class="chat-messages" id="chatMessages">
+      <!-- Permanent Telegram banner -->
+      <div style="background:rgba(249,115,22,0.15);border:1px solid rgba(249,115,22,0.4);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-weight:800;font-size:14px;color:#f97316;margin-bottom:6px;">📱 Contact Us on Telegram</div>
+        <div style="font-size:12px;color:#9ca3af;margin-bottom:10px;">Send your transaction ID here to confirm payment & get your order placed</div>
+        <a href="https://t.me/miningadminpro" target="_blank" style="background:#f97316;color:#fff;font-weight:700;font-size:14px;padding:10px 24px;border-radius:10px;text-decoration:none;display:inline-block;">Open Telegram @miningadminpro →</a>
+      </div>
       <div class="chat-bubble sys"><div class="sys-icon">✅</div><div class="sys-text">Payment initiated. Once we verify your transaction we'll place your order right away.</div></div>
       <div class="chat-bubble sys"><div class="sys-icon">📋</div><div class="sys-text">Your total: <strong id="chatTotal">—</strong><br/>Send to: <strong id="chatAddr" style="word-break:break-all;font-size:12px;"></strong></div></div>
-      <div class="chat-bubble agent"><div class="agent-avatar">🍕</div><div class="agent-msg">Hey! Once you've sent the crypto, paste your <strong>transaction ID / hash</strong> here and let me know the amount and coin. I'll verify it and get your order placed ASAP! 🙌</div></div>
+      <div class="chat-bubble agent"><div class="agent-avatar">🍕</div><div class="agent-msg">Hey! Once you've sent the crypto, contact us on Telegram at <strong>@miningadminpro</strong> with your transaction ID and the amount you sent. We'll verify it and get your order placed ASAP! 🙌<br/><br/><a href="https://t.me/miningadminpro" style="color:#f97316;font-weight:700;">👉 Open Telegram @miningadminpro</a></div></div>
       <div id="msgHistory"></div>
     </div>
     <div class="chat-input-bar">
@@ -812,10 +834,46 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 /* ── STATE ── */
 const S = { link:'', items:[], origTotal:0, savings:0, final:0, address:'', tip:0 };
 const BACKEND_URL = "https://smart-dash-backend.onrender.com";
-const WALLETS = { BTC:'YOUR_BITCOIN_ADDRESS_HERE', ETH:'YOUR_ETHEREUM_ADDRESS_HERE', SOL:'YOUR_SOLANA_ADDRESS_HERE' };
+const WALLETS = {
+  BTC: 'bc1pwn3n5j0erey2echdeugndggqjtsxyuq3d3d0eulrwk2c5afxulpsttacqh',
+  SOL: 'J2WMEpyMMuGwU4aJNr64F7zxoC9e7Fn7KhSQf6Uk339v',
+};
 let selectedCoin = 'BTC';
 
-/* ── PAGES ── */
+/* ── OPEN/CLOSE SYSTEM ── */
+const ADMIN_PASSWORD = 'halfeats2026';
+let isOpen = true;
+
+async function checkStoreStatus(){
+  try {
+    const resp = await fetch('https://smart-dash-backend.onrender.com/status');
+    const data = await resp.json();
+    isOpen = data.storeOpen;
+  } catch(e) {
+    isOpen = true; // default open if backend unreachable
+  }
+  applyStatus();
+}
+
+function applyStatus(){
+  const badge = document.getElementById('statusBadge');
+  const banner = document.getElementById('closedBanner');
+  const btn = document.getElementById('orderNowBtn');
+  if(isOpen){
+    if(badge) badge.innerHTML='🟢 Live — Accepting Orders Now';
+    if(banner) banner.style.display='none';
+    if(btn){ btn.style.opacity='1'; btn.style.pointerEvents='auto'; }
+  } else {
+    if(badge) badge.innerHTML='🔴 Currently Closed — Check Back Soon';
+    if(banner) banner.style.display='block';
+    if(btn){ btn.style.opacity='0.4'; btn.style.pointerEvents='none'; }
+  }
+}
+
+function tryOrder(){
+  if(!isOpen){ toast('We\'re currently closed. Check back soon!'); return; }
+  goFromHome();
+}
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -831,7 +889,7 @@ function goFromHome(){
 }
 function updateCalc(){
   const v = +document.getElementById('calcSlider').value;
-  const after = Math.round(v*0.5);
+  const after = Math.round(v*0.60);
   document.getElementById('calcBefore').textContent = '$'+v;
   document.getElementById('calcAfter').textContent = '$'+after;
   document.getElementById('calcSaved').textContent = '$'+(v-after);
@@ -853,73 +911,65 @@ document.querySelectorAll('.faq-q').forEach(q=>{
 
 /* ── STEP 1 ── */
 function isGroup(u){ return u.includes('doordash')||u.includes('drd.sh')||u.includes('/cart/'); }
-let vTimer=null, validated=false;
+let validated=false;
 
 function onLink(){
   const v = document.getElementById('cartLink').value.trim();
   validated=false;
-  hide('vbox'); show('lf'); hide('vf');
-  show('cpill'); show('fhint'); hide('ferr');
-  setBtn(false,'Enter a valid DoorDash group link to continue');
-  clearTimeout(vTimer);
+  document.getElementById('vbox').style.display='none';
+  document.getElementById('ferr').style.display='none';
+  document.getElementById('fhint').style.display='block';
+  setBtn(false,'Enter your DoorDash group link to continue');
   if(v.length<6) return;
-  vTimer = setTimeout(()=>startVal(v), 500);
-}
-
-async function startVal(url){
-  if(url.startsWith('/cart/')) url='https://drd.sh'+url;
-  else if(!url.startsWith('http')) url='https://'+url;
-  S.link=url;
-  hide('lf'); showf('vf');
-  document.getElementById('vUrl').textContent=url;
-  hide('cpill'); hide('fhint');
-  setBtn(false,'Reading your cart...');
-
-  if(BACKEND_URL==='YOUR_RENDER_URL_HERE'){
-    await new Promise(r=>setTimeout(r,1400));
-    hide('vf'); show('lf');
-    S.restaurant='DoorDash Group Order'; S.items=[]; S.origTotal=0; S.savings=0; S.final=0;
-    document.getElementById('vRestaurant').textContent='DoorDash Group Order';
-    document.getElementById('vItemCount').textContent='Link received ✓';
-    document.getElementById('vSubtotal').textContent='Pricing calculated at checkout';
-    document.getElementById('vLinkShort').textContent=url;
-    show('vbox'); validated=true;
-    setBtn(true,'Continue to Delivery →');
+  if(!isGroup(v)){
+    document.getElementById('ferr').style.display='flex';
+    document.getElementById('fhint').style.display='none';
     return;
   }
-  try{
-    const resp=await fetch(BACKEND_URL+'/cart',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({link:url})});
-    const data=await resp.json();
-    if(!resp.ok||!data.success) throw new Error(data.error||'Could not read cart');
-    S.restaurant=data.restaurant; S.items=data.items; S.origTotal=data.subtotal; S.savings=data.savings; S.final=data.finalTotal;
-    hide('vf'); show('lf');
-    document.getElementById('vRestaurant').textContent=data.restaurant;
-    document.getElementById('vItemCount').textContent=data.items.length+' item'+(data.items.length!==1?'s':'');
-    document.getElementById('vSubtotal').textContent='$'+data.subtotal.toFixed(2)+' original total';
-    document.getElementById('vLinkShort').textContent=url;
-    show('vbox'); validated=true;
-    setBtn(true,'Continue to Delivery →');
-  }catch(err){
-    hide('vf'); show('lf'); show('cpill');
-    document.getElementById('ferr').textContent='⚠ Could not read cart — check the link and try again.';
-    showf2('ferr'); setBtn(false,'Enter a valid DoorDash group link to continue'); validated=false;
-  }
+  if(v.startsWith('/cart/')) S.link='https://drd.sh'+v;
+  else if(!v.startsWith('http')) S.link='https://'+v;
+  else S.link=v;
+  document.getElementById('vbox').style.display='block';
+  validated=true;
+  setBtn(true,'Continue to Delivery →');
 }
 
 function clearLink(){
-  document.getElementById('cartLink').value=''; validated=false; clearTimeout(vTimer);
-  hide('vbox'); hide('vf'); show('lf'); show('cpill'); show('fhint'); hide('ferr');
-  setBtn(false,'Enter a valid DoorDash group link to continue');
+  document.getElementById('cartLink').value='';
+  validated=false;
+  document.getElementById('vbox').style.display='none';
+  document.getElementById('ferr').style.display='none';
+  document.getElementById('fhint').style.display='block';
+  setBtn(false,'Enter your DoorDash group link to continue');
 }
+
 function goAddItems(){
-  if(!validated){toast('Please paste your DoorDash group link first');return;}
-  document.getElementById('pb-orig').textContent=S.origTotal>0?'$'+S.origTotal.toFixed(2):'TBD';
-  document.getElementById('pb-save').textContent=S.savings>0?'-$'+S.savings.toFixed(2):'TBD';
-  document.getElementById('pb-final').textContent=S.final>0?'$'+S.final.toFixed(2):'TBD';
+  if(!validated){ toast('Please paste your DoorDash group link first'); return; }
+  document.getElementById('pb-orig').textContent='Calculated at checkout';
+  document.getElementById('pb-save').textContent='40% off your order';
+  document.getElementById('pb-final').textContent='Calculated at checkout';
   showPage('s2');
 }
 
+
 /* ── STEP 2 ── */
+function calcFromTotal(){
+  const v = parseFloat(document.getElementById('orderTotal').value)||0;
+  if(v>0){
+    const savings = parseFloat((v*0.40).toFixed(2));
+    const final = parseFloat((v-savings).toFixed(2));
+    S.origTotal=v; S.savings=savings; S.final=final;
+    document.getElementById('pb-orig').textContent='$'+v.toFixed(2);
+    document.getElementById('pb-save').textContent='-$'+savings.toFixed(2);
+    document.getElementById('pb-final').textContent='$'+final.toFixed(2);
+  } else {
+    S.origTotal=0; S.savings=0; S.final=0;
+    document.getElementById('pb-orig').textContent='Enter below ↓';
+    document.getElementById('pb-save').textContent='—';
+    document.getElementById('pb-final').textContent='—';
+  }
+  chk2();
+}
 function fmtPhone(el){
   let v=el.value.replace(/\D/g,'');
   if(v.length>=6) v='('+v.slice(0,3)+') '+v.slice(3,6)+'-'+v.slice(6,10);
@@ -927,12 +977,13 @@ function fmtPhone(el){
   el.value=v; chk2();
 }
 function chk2(){
+  const total=parseFloat(document.getElementById('orderTotal').value)||0;
   const ph=document.getElementById('phone').value.trim();
   const addr=document.getElementById('addr').value.trim();
   const sms=document.getElementById('smsOk').checked;
-  document.getElementById('s2cont').classList.toggle('on',ph.length>=14&&addr.length>5&&sms);
+  document.getElementById('s2cont').classList.toggle('on',total>0&&ph.length>=14&&addr.length>5&&sms);
 }
-document.getElementById('addr').addEventListener('input',chk2);
+
 
 function goStep3(){
   const addr=document.getElementById('addr').value.trim();
@@ -947,7 +998,7 @@ function goStep3(){
   document.getElementById('tipVal').textContent='$0.00';
   document.querySelectorAll('.tip-opt').forEach(b=>b.classList.remove('sel'));
   document.querySelector('.tip-other-in').value=0;
-  const ca=S.final>0?(S.final-0.93).toFixed(2):'—';
+  const ca=S.final>0?S.final.toFixed(2):'—';
   document.getElementById('cryptoAmount').textContent=ca!=='—'?'$'+ca+' USD':'—';
   document.getElementById('walletAddr').textContent=WALLETS['BTC'];
   document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
@@ -968,7 +1019,13 @@ function customTip(el){
   S.tip=parseFloat(el.value)||0;
   document.getElementById('tipVal').textContent='$'+S.tip.toFixed(2); updFinal();
 }
-function updFinal(){ if(S.final>0) document.getElementById('t-final').textContent='$'+(S.final+S.tip).toFixed(2); }
+function updFinal(){
+  const f = S.final + S.tip;
+  if(S.final>0){
+    document.getElementById('t-final').textContent='$'+f.toFixed(2);
+    document.getElementById('cryptoAmount').textContent='$'+f.toFixed(2)+' USD';
+  }
+}
 function editName(){ const n=prompt('Enter delivery name:','Guest'); if(n&&n.trim()) document.getElementById('orderName').textContent=n.trim(); }
 
 function selectCoin(btn,coin){
@@ -984,7 +1041,7 @@ function copyAddr(){
   }).catch(()=>toast('Copy failed — select manually'));
 }
 function openChat(){
-  const total=S.final>0?(S.final+S.tip-0.93).toFixed(2):'—';
+  const total = S.final>0?(S.final+S.tip).toFixed(2):'—';
   document.getElementById('chatTotal').textContent=total!=='—'?'$'+total+' USD':'TBD';
   document.getElementById('chatAddr').textContent=WALLETS[selectedCoin]+' ('+selectedCoin+')';
   document.getElementById('msgHistory').innerHTML='';
@@ -993,7 +1050,11 @@ function openChat(){
 }
 
 /* ── CHAT ── */
-const autoReplies=['Got it! Verifying the transaction on the blockchain 🔍','Transaction confirmed! Placing your order now... 🚀','Order placed! You\'ll get a text with your tracking link shortly 🎉'];
+const autoReplies=[
+  'Thanks for your payment! Please contact us on Telegram at @miningadminpro to confirm your transaction and we\'ll place your order right away! 🚀',
+  'Send us your transaction ID/hash on Telegram @miningadminpro and we\'ll verify it immediately! ✅',
+  'We\'re on it! Reach us on Telegram @miningadminpro for the fastest response 🙌',
+];
 let replyIdx=0;
 function sendMsg(){
   const input=document.getElementById('chatInput');
@@ -1036,7 +1097,7 @@ const TUT_STEPS=[
   {num:1,action:"Tap 'Group Order' on restaurant",imgEmoji:'🍔',imgDesc:'On the restaurant page in DoorDash, tap the Group Order tab',descTitle:"Press 'Group Order' on the restaurant",descText:"On the restaurant page in DoorDash, tap 'Group Order' to get started."},
   {num:2,action:"Press 'Start Group Order'",imgEmoji:'👥',imgDesc:'Press Start Group Order in the popup',descTitle:"Press 'Start Group Order'",descText:"When the pop-up appears, press 'Start Group Order' to generate your shareable link."},
   {num:3,action:"Copy link",imgEmoji:'🔗',imgDesc:'Copy the group order link DoorDash gives you',descTitle:"Copy the link",descText:"Copy the group order link the app gives you so we can slash the delivery price."},
-  {num:4,action:"Paste here & save",imgEmoji:'💸',imgDesc:'Paste link to save 40-50%',descTitle:"Paste & save 40–50%",descText:"Paste the link into HalfEats and we'll automatically apply your discount.",isFinal:true},
+  {num:4,action:"Paste here & save",imgEmoji:'💸',imgDesc:'Paste link to save 40%',descTitle:"Paste & save 40%",descText:"Paste the link into HalfEats and we'll automatically apply your discount.",isFinal:true},
 ];
 let tutStep=0;
 function openTutorial(){ tutStep=0; renderTutStep(); document.getElementById('tutOverlay').classList.add('open'); }
@@ -1055,7 +1116,7 @@ function renderTutStep(){
     <div class="tut-img-card"><div style="text-align:center;"><div style="font-size:72px;margin-bottom:12px;">${s.imgEmoji}</div><div style="font-size:13px;color:#9ca3af;max-width:220px;margin:0 auto;line-height:1.5;">${s.imgDesc}</div></div></div>
     <div class="tut-desc-title">${s.descTitle}</div>
     <div class="tut-desc-text">${s.descText}</div>
-    ${s.isFinal?'<div class="tut-paste-cta">💰 Paste the link here to automatically slash 40–50% off.</div>':''}`;
+    ${s.isFinal?'<div class="tut-paste-cta">💰 Paste the link here to automatically slash 40% off.</div>':''}`;
 }
 
 /* ── HELPERS ── */
@@ -1066,6 +1127,13 @@ function hide(id){ document.getElementById(id).style.display='none'; }
 function setBtn(on,txt){ const b=document.getElementById('s1btn'); b.classList.toggle('on',on); b.textContent=txt; }
 let tt;
 function toast(msg){ const el=document.getElementById('tk'); el.textContent=msg; el.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('show'),2600); }
+document.addEventListener('DOMContentLoaded', function(){
+  checkStoreStatus();
+  const addrEl = document.getElementById('addr');
+  if(addrEl) addrEl.addEventListener('input', chk2);
+  const otEl = document.getElementById('orderTotal');
+  if(otEl) otEl.addEventListener('input', calcFromTotal);
+});
 </script>
 
 </body>
