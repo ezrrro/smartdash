@@ -1258,12 +1258,30 @@ function clearLink(){
   setBtn(false,'Enter your DoorDash group link to continue');
 }
 
+async function checkOpenThenProceed(callback){
+  try {
+    const resp = await fetch('https://smart-dash-backend.onrender.com/status');
+    const data = await resp.json();
+    if(!data.storeOpen){
+      isOpen = false;
+      applyStatus();
+      toast('We are currently closed. Check back soon!');
+      return;
+    }
+    callback();
+  } catch(e) {
+    callback(); // if backend unreachable just proceed
+  }
+}
+
 function goAddItems(){
   if(!validated){ toast('Please paste your DoorDash group link first'); return; }
-  document.getElementById('pb-orig').textContent='Calculated at checkout';
-  document.getElementById('pb-save').textContent='40% off your order';
-  document.getElementById('pb-final').textContent='Calculated at checkout';
-  showPage('s2');
+  checkOpenThenProceed(()=>{
+    document.getElementById('pb-orig').textContent='Enter below \u2193';
+    document.getElementById('pb-save').textContent='\u2014';
+    document.getElementById('pb-final').textContent='\u2014';
+    showPage('s2');
+  });
 }
 
 
@@ -1324,28 +1342,30 @@ function chk2(){
 
 
 function goStep3(){
-  const addr=document.getElementById('addr').value.trim();
-  const apt=document.getElementById('apt').value.trim();
-  const name=document.getElementById('customerName').value.trim();
-  S.address=addr+(apt?', '+apt:''); S.tip=0;
-  S.customerName=name;
-  document.getElementById('p3rest').textContent=S.restaurant||'Your Order';
-  document.getElementById('p3addr').textContent=S.address;
-  document.getElementById('p3link').textContent=S.link;
-  document.getElementById('orderName').textContent=name||'Guest';
-  document.getElementById('t-orig').textContent=S.origTotal>0?'$'+S.origTotal.toFixed(2):'TBD';
-  document.getElementById('t-save').textContent=S.savings>0?'-$'+S.savings.toFixed(2):'TBD';
-  document.getElementById('t-final').textContent=S.final>0?'$'+S.final.toFixed(2):'TBD';
-  document.getElementById('tipVal').textContent='$0.00';
-  document.querySelectorAll('.tip-opt').forEach(b=>b.classList.remove('sel'));
-  document.querySelector('.tip-other-in').value=0;
-  const ca=S.final>0?S.final.toFixed(2):'—';
-  document.getElementById('cryptoAmount').textContent=ca!=='—'?'$'+ca+' USD':'—';
-  document.getElementById('walletAddr').textContent=WALLETS['BTC'];
-  document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.coin-btn')[0].classList.add('active');
-  selectedCoin='BTC'; replyIdx=0;
-  showPage('terms');
+  checkOpenThenProceed(()=>{
+    const addr=document.getElementById('addr').value.trim();
+    const apt=document.getElementById('apt').value.trim();
+    const name=document.getElementById('customerName').value.trim();
+    S.address=addr+(apt?', '+apt:''); S.tip=0;
+    S.customerName=name;
+    document.getElementById('p3rest').textContent=S.restaurant||'Your Order';
+    document.getElementById('p3addr').textContent=S.address;
+    document.getElementById('p3link').textContent=S.link;
+    document.getElementById('orderName').textContent=name||'Guest';
+    document.getElementById('t-orig').textContent=S.origTotal>0?'$'+S.origTotal.toFixed(2):'TBD';
+    document.getElementById('t-save').textContent=S.savings>0?'-$'+S.savings.toFixed(2):'TBD';
+    document.getElementById('t-final').textContent=S.final>0?'$'+S.final.toFixed(2):'TBD';
+    document.getElementById('tipVal').textContent='$0.00';
+    document.querySelectorAll('.tip-opt').forEach(b=>b.classList.remove('sel'));
+    document.querySelector('.tip-other-in').value=0;
+    const ca=S.final>0?S.final.toFixed(2):'—';
+    document.getElementById('cryptoAmount').textContent=ca!=='—'?'$'+ca+' USD':'—';
+    document.getElementById('walletAddr').textContent=WALLETS['BTC'];
+    document.querySelectorAll('.coin-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.coin-btn')[0].classList.add('active');
+    selectedCoin='BTC'; replyIdx=0;
+    showPage('terms');
+  });
 }
 
 let legalFrom = 'home';
@@ -1356,7 +1376,7 @@ function openLegal(from){
 }
 
 function agreeAndPay(){
-  showPage('s3');
+  checkOpenThenProceed(()=>{ showPage('s3'); });
 }
 
 /* ── STEP 3 ── */
