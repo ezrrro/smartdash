@@ -713,9 +713,9 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
   <div class="field-lbl">Your DoorDash Order Total <span class="req">*</span></div>
   <div class="f-wrap">
     <span class="f-icon">💰</span>
-    <input class="f-input" id="orderTotal" type="number" min="25" max="40" step="0.01" placeholder="Enter your cart total (between $25–$40)" oninput="calcFromTotal()"/>
+    <input class="f-input" id="orderTotal" type="number" min="25" max="30" step="0.01" placeholder="Enter your cart total (between $25–$30)" oninput="calcFromTotal()"/>
   </div>
-  <div class="f-note" id="totalNote">We accept orders between <strong>$25–$40</strong>. Open DoorDash → your cart → enter the subtotal shown.</div>
+  <div class="f-note" id="totalNote">We accept orders between <strong>$25–$30</strong>. Open DoorDash → your cart → enter the subtotal shown.</div>
   <div style="font-size:12px;color:#ef4444;margin-top:5px;display:none;" id="totalErr"></div>
 </div>
 
@@ -873,7 +873,7 @@ footer { background:#141414 !important; border-color:#2a2a2a !important; }
 
   <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
     <div style="font-weight:800;font-size:15px;margin-bottom:10px;color:#f97316;">6. Order Limits</div>
-    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats currently accepts orders with a minimum subtotal of $25.00 and a maximum subtotal of $40.00. Orders outside this range will not be processed. These limits may change at any time without notice.</div>
+    <div style="font-size:13px;color:#9ca3af;line-height:1.8;">HalfEats currently accepts orders with a minimum subtotal of $25.00 and a maximum subtotal of $30.00. Orders outside this range will not be processed. These limits may change at any time without notice.</div>
   </div>
 
   <div style="background:#1c1c1c;border-radius:16px;padding:20px;border:1px solid #2a2a2a;">
@@ -1306,7 +1306,7 @@ function calcFromTotal(){
     chk2(); return;
   }
   if(v > 40){
-    errEl.textContent='⚠ Maximum order is $40.00 — contact us on Telegram @HalfEatsSupport for larger orders';
+    errEl.textContent='⚠ Maximum order is $30.00 — contact us on Telegram @HalfEatsSupport for larger orders';
     errEl.style.display='block'; noteEl.style.display='none';
     S.origTotal=0; S.savings=0; S.final=0;
     document.getElementById('pb-orig').textContent='Enter below ↓';
@@ -1336,7 +1336,7 @@ function chk2(){
   const ph=document.getElementById('phone').value.trim();
   const addr=document.getElementById('addr').value.trim();
   const sms=document.getElementById('smsOk').checked;
-  const validTotal=total>=25&&total<=40;
+  const validTotal=total>=25&&total<=30;
   document.getElementById('s2cont').classList.toggle('on',validTotal&&name.length>0&&ph.length>=14&&addr.length>5&&sms);
 }
 
